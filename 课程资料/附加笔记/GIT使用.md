@@ -4,8 +4,6 @@
 
 - 访问git官网:[https://git-scm.com/](https://git-scm.com/)下载符合当前系统的安装包，下载后进行安装。
 
-![image-20210304155931261](https://gitee.com/paida-spitting-star/image/raw/a56773a1009cd11de6393fb7e2421db31cf5fe87/git01.png)
-
 # 2 IDEA中配置Git
 
 ①菜单栏顺序选择: File→Settings→Version Control→Git,在弹出框中选择下图中的Git
@@ -29,6 +27,10 @@ gitee网站地址:[https://gitee.com/](https://gitee.com/)
 github网站地址:[https://github.com/](https://github.com/)
 
 ## 3.2 创建仓库
+
+```
+https://gitee.com/paida-spitting-star/gitdemo.git
+```
 
 - 以下以gitee为例进行介绍，github操作雷同。
 
