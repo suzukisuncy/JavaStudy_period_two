@@ -25,6 +25,6 @@ public class FileDemo {
         System.out.println("name = " + name);
         //获取文件的长度(字节) 一个因为字母是1个字节 一个中文是3个字节
         long length = file.length();
-        System.out.println("length = " + length);
+        System.out.println("length = " + length+"个字节");
     }
 }
