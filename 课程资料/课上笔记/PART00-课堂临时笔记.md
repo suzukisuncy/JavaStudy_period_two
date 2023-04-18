@@ -29,3 +29,51 @@ demo/demo.txt
 选中要打开的文件,**`右键→选择Open In→Explorer`**
 
 ![image-20230418200710212](https://gitee.com/paida-spitting-star/image/raw/master/image-20230418200710212.png)
+
+### 5 IDEA生成方法
+
+①生成无参无返回值的方法
+
+- 调用方法处
+
+```java
+recursionDir();
+```
+
+- 方法会报红色提示,按alt+enter,直接回车,会自动生成方法体
+
+```java
+private static void recursionDir() {
+}
+```
+
+②生成含参无返回值的方法
+
+- 调用方法处
+
+```java
+recursionDir(dir);
+```
+
+- 方法会报红色提示,按alt+enter,直接回车,会自动生成方法体
+
+```java
+private static void recursionDir(File dir) {
+}
+```
+
+③生成含参含返回值的方法
+
+- 调用方法处
+
+```java
+boolean result = recursionDir(dir);
+```
+
+- 方法会报红色提示,按alt+enter,直接回车,会自动生成方法体
+
+```java
+private static boolean recursionDir(File dir) {
+}
+```
+
