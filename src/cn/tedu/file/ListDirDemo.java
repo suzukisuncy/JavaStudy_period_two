@@ -41,6 +41,8 @@ public class ListDirDemo {
                 } else {
                     //4.2.如果当前遍历的是目录, 输出当前目录的路径+名称
                     System.out.println("目录:" + subs[i]);
+                    //并以此目录为根,再次执行recursionDir方法的逻辑,遍历该目录的子目录和子文件
+                    recursionDir(subs[i]);
                 }
             }
         }
