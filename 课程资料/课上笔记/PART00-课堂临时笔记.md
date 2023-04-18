@@ -23,3 +23,9 @@ demo/demo.txt
 ①删除本地的老师的项目
 
 ②然后重新根据git连接下载
+
+### 4 IDEA快速打开文件所在目录
+
+选中要打开的文件,**`右键→选择Open In→Explorer`**
+
+![image-20230418200710212](https://gitee.com/paida-spitting-star/image/raw/master/image-20230418200710212.png)
