@@ -1,4 +1,4 @@
-#  IO 
+#  IO
 
 ## IO简介
 
@@ -17,6 +17,8 @@
   - 输入流用来读取in
   - 输出流用来写出Out
   - 数据只能从头到尾顺序的读取一次或写出一次
+
+![image-20230420210605045](https://gitee.com/paida-spitting-star/image/raw/master/image-20230420210605045.png)
 
 ## 节点流和处理流
 
@@ -40,18 +42,18 @@
 
 ### OutputStream 
 
-- 此抽象类是表示输出字节流的所有类的超类。输出流接受输出字节并将这些字节发送到某个接收器。
+- 此抽象类是表示**`输出字节流`**的所有类的超类。输出流接受输出字节并将这些字节发送到某个接收器。
 
 ### FileOutputStream
 
-- 直接插在文件上，直接写出文件数据
+- 直接插在文件上，直接写出(输出)文件数据
 
 **创建对象：**
 
-```
-FileOutputStream(String name) 创建一个向具有指定名称的文件中写入数据的输出文件流。
-FileOutputStream(File file) 创建一个向指定 File 对象表示的文件中写入数据的文件输出流。
-FileOutputStream(File file, boolean append) –追加 创建一个向指定 File 对象表示的文件中写入数据的文件输出流。
+```java
+FileOutputStream(String name) //创建一个向具有指定名称的文件中写入数据的输出文件流。
+FileOutputStream(File file) //创建一个向指定 File 对象表示的文件中写入数据的文件输出流。
+FileOutputStream(File file, boolean append) //追加 创建一个向指定 File 对象表示的文件中写入数据的文件输出流。
 ```
 
 <font color=red>注意: 以上构造方法中, 如果参数指向的文件以及父目录都不存在, 将会抛出FileNotFoundException异常!如果参数指向的文件不存在, 但文件的所在目录存在, 将不会抛异常, 程序会自动创建该文件!</font>
