@@ -1,6 +1,6 @@
 # 反射
 
-## 获取Class对象
+## 1 获取Class对象
 
 获取Class对象的三种方式：（例如获取Student类的Class对象）
 
@@ -16,9 +16,9 @@
 
    Class clazz = Class.forName( "cn.tedu.Student" );
 
-## Class对象常用方法
+## 2 Class对象常用方法
 
-###  获取Class对象所代表类(或接口)的所在包路径、类名、全限定名称
+- **获取Class对象所代表类(或接口)的所在包路径、类名、全限定名称**
 
 ```
 String getPackageName() -- 返回所反射 类(或接口) 的包名
@@ -27,7 +27,7 @@ String getSimpleName() -- 返回所反射 类 的类名(或所反射接口的接
 String getName()--返回 所反射 类(或接口) 的全限定类名(包名+类名/接口名)
 ```
 
-### 获取所反射 类(或接口) 的成员变量定义信息
+- **获取所反射 类(或接口) 的成员变量定义信息**
 
 ```
 Field getField(String name) 
@@ -45,7 +45,7 @@ Field[] getDeclaredFields()
   -- 只能获取本类中的成员变量（包括私有成员变量），但不包括从父类中继承的
 ```
 
-###  获取所反射 类(或接口) 的构造方法定义信息
+- **获取所反射 类(或接口) 的构造方法定义信息**
 
 ```
 Constructor getConstructor(类... parameterTypes)
@@ -62,7 +62,7 @@ Constructor[] getDeclaredConstructors()
   -- 获取的构造方法可以是公开的，也可以是私有的
 ```
 
-###  获取所反射 类(或接口) 的成员方法定义信息
+- **获取所反射 类(或接口) 的成员方法定义信息**
 
 ```
 Method getMethod(String name, 类... parameterTypes) 
@@ -79,142 +79,70 @@ Method[] getDeclaredMethods()
   -- 获取的成员方法可以是公开的，也可以是私有的
 ```
 
-## 反射的应用
+## 3 反射的应用
 
-### 准备工作
+### 3.1 准备工作
 
-#### 定义一个Person类（对该类进行反射）
-
-```java
-package reflect;
-
-/**
- * 使用当前类来测试反射机制
- */
-public class Person {
-    private String name = "张三";
-    private int age = 22;
-    //无参构造 全参构造
-    public Person(){}
-    public Person(String name, int age) {
-        this.name = name;
-        this.age = age;
-    }
-    public void sayHello(){
-        System.out.println(name+":hello!!");
-    }
-    public void sayHi(){
-        System.out.println(name+":hi!!");
-    }
-    public void sayGoodBye(){
-        System.out.println(name+":bye!!");
-    }
-    public void dosome(String thing){
-        System.out.println(name+"正在"+thing);
-    }
-    public void dosome(String thing,int sum){
-        for(int i=0;i<sum;i++){
-            System.out.println(name+"正在"+thing);
-        }
-    }
-    private void secret(){
-        System.out.println(name+":这是我的私有方法!");
-    }
-    @Override
-    public String toString() {
-        return "Person{" +
-                "name='" + name + '\'' +
-                ", age=" + age +
-                '}';
-    }
-}
-```
-
-#### 定义一个Student类
-
-```java
-package reflect;
-
-public class Student {
-    public void study(){
-        System.out.println("学生:好好学习,天天向上!");
-    }
-    public void playGame(){
-        System.out.println("学生:好好游戏,才好学习!");
-    }
-}
-```
-
-### 测试开始
-
-#### ReflectDemo1
+- **定义一个Person类（对该类进行反射）**
 
 ```java
 
 ```
 
-####  ReflectDemo2 
+- **定义一个Student类**
 
 ```java
 
 ```
 
-#### ReflectDemo3
+### 3.2 测试开始
+
+#### 3.2.1 ReflectDemo1
 
 ```java
 
 ```
 
-####  ReflectDemo4
+####  3.2.2 ReflectDemo2 
 
 ```java
 
 ```
 
-#### ReflectDemo5
+#### 3.2.3 ReflectDemo3
 
 ```java
 
 ```
 
-#### ReflectDemo6
+####  3.2.4 ReflectDemo4
 
 ```java
 
 ```
 
-#### ReflectDemo7
+#### 3.2.5 ReflectDemo5
 
 ```java
 
 ```
 
-#### ReflectDemo8
+#### 3.2.6 ReflectDemo6
 
 ```java
 
 ```
 
-#### ArgsDemo
+#### 3.2.7 ReflectDemo7
 
 ```java
 
 ```
 
-#### Test1
+#### 3.2.8 ReflectDemo8
 
 ```java
 
 ```
 
-#### Test2
-
-```java
-
-```
-
-#### Test3
-
-```java
-
-```
+#### 3.2.9 ReflectDemo9

@@ -1,6 +1,6 @@
 # 一、File
 
-## File类概述
+## 1 File类概述
 
 - File类的每一个实例可以表示硬盘(文件系统)中的一个文件或目录(实际上表示的是一个抽象路径)
 
@@ -9,7 +9,7 @@
   2. 创建和删除文件或目录
   3. 访问一个目录中的子项
 
-## 获取文件及其属性
+## 2 获取文件及其属性
 
 ```
 length(): 返回文件的长度, 单位是字节数(如果File是目录, 则返回0)
@@ -21,7 +21,7 @@ getParent(): 获取当前File父目录的路径
 getAbsolutePath(): 获取当前File文件或目录的完整路径
 ```
 
-### 代码案例
+- **代码案例**
 
 ```java
 package cn.tedu.file;
@@ -56,13 +56,13 @@ public class FileDemo {
 }
 ```
 
-## 创建文件
+## 3 创建文件
 
 ```
 createNewFile(): 创建指定路径和名称的文件, 如果文件不存在, 则创建并返回true, 否则就不创建并返回false
 ```
 
-### 	代码案例
+- **代码案例**
 
 ```java
 package cn.tedu.file;
@@ -94,13 +94,13 @@ public class CreateNewFileDemo {
 }
 ```
 
-## 删除文件
+## 4 删除文件
 
 ```
 delete(): 删除文件或删除空目录, 删除成功返回true(非空目录删除会失败)
 ```
 
-###  代码案例
+- **代码案例**
 
 ```java
 package cn.tedu.file;
@@ -125,14 +125,14 @@ public class DeleteFileDemo {
 }
 ```
 
-## 创建目录
+## 5 创建目录
 
 ```
 mkdir(): 创建指定路径和名称的目录, 如果目录不存在, 则创建并返回true, 否则就不创建并返回false
 mkdirs(): 创建指定路径和名称的多级目录, 如果目录不存在, 则创建并返回true, 否则就不创建并返回false
 ```
 
-###  代码案例
+- **代码案例**
 
 ```java
 package cn.tedu.file;
@@ -160,13 +160,13 @@ public class MKDirDemo {
 }
 ```
 
-## 删除目录
+## 6 删除目录
 
 ```
 delete(): 删除文件或删除空目录, 删除成功返回true(非空目录删除会失败)
 ```
 
-###  代码案例
+- **代码案例**
 
 ```java
 package cn.tedu.file;
@@ -194,9 +194,9 @@ public class DeleteDirDemo {
 }
 ```
 
-## 获取目录中的子项
+## 7 获取目录中的子项
 
-### 代码案例
+- **代码案例**
 
 ```java
 package cn.tedu.file;
@@ -231,11 +231,11 @@ public class ListFilesDemo {
 }
 ```
 
-## 获取目录中的符合过滤条件子项
+## 8 获取目录中的符合过滤条件子项
 
 <img src="https://gitee.com/paida-spitting-star/image/raw/master/image-20230420201307142.png" alt="image-20230420201307142" style="zoom: 33%;" />
 
-### 代码案例
+- **代码案例**
 
 ```java
 package cn.tedu.file;
@@ -279,7 +279,7 @@ public class ListFilesDemo2 {
 }
 ```
 
-## 递归遍历目录
+## 9 递归遍历目录
 
 递归（recursion）是一种常见的解决问题的方法，即把问题逐渐简单化。
 
@@ -297,7 +297,9 @@ public class ListFilesDemo2 {
 
 需要注意的是: 递归方法一定要有出口, 否则将会一直自己调用自己, 变成死循环, 严重时将会导致内存溢出!
 
-### 需求: 遍历指定File(目录)下的所有子目录和子文件, 输出该目录下的所有目录和文件名
+### 9.1 需求:
+
+- 遍历指定File(目录)下的所有子目录和子文件, 输出该目录下的所有目录和文件名
 
 ```
 思路: 声明一个diGui目录的方法, 接收一个File类型的对象, 方法内部实现如下: 
@@ -312,9 +314,9 @@ public class ListFilesDemo2 {
   并以此目录作为根, 接着遍历该目录下的所有子目录和子文件, 输出该目录下的所有目录和文件名
 ```
 
-### 统计一个目录下所有文件的大小之和
+### 9.2 统计一个目录下所有文件的大小之和
 
-#### 代码案例
+- **代码案例**
 
 ```java
 package cn.tedu.file;
@@ -369,9 +371,9 @@ public class ListDirDemo {
 }
 ```
 
-### 删除一个目录及其中所有子项
+### 9.3 删除一个目录及其中所有子项
 
-#### 代码案例
+- **代码案例**
 
 ```java
 package cn.tedu.file;
@@ -435,7 +437,7 @@ public class DeleteDirDGDemo {
 
 - lambda表达式是编译器认可的,最终会将其改为内部类编译到class文件中
 
-## 代码案例
+- **代码案例**
 
 ```java
 package cn.tedu.lambda;

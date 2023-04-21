@@ -1,12 +1,12 @@
 # 异常处理
 
-## 概述
+## 1 概述
 
 - **异常:** 就是指程序出现了不正常的情况
 - 用来封装错误信息的对象。
 - 组成结构：**类型**，**提示**，**行号**。
 
-## 异常的继承结构       
+## 2 异常的继承结构       
 
 - Java中所有错误和异常的顶级父类是Throwable类
 
@@ -26,13 +26,13 @@
   
     RuntimeException以及子类被称为未经检查的异常(也叫运行时异常),这类异常通常在编写完程序后没有问题, 但是运行程序才出现异常, 需要我们回来修改代码进行解决的异常,这类异常无需显式处理, 当然也可以像编译时异常一样处理,例如:IndexOutOfBoundsException、ArithmeticException、NullPointerException、ClassCastException 等都是运行时异常。判断一个异常是不是运行时异常, 可以通过检查这个异常类是不是RuntimeException的子类, 或者检查这个异常是否只有在程序运行时才会出现!
 
-## 虚拟机的默认处理方式
+## 3 虚拟机的默认处理方式
 
 - 如果程序在运行时出现了问题，而我们又没有处理该问题，最终虚拟机会做默认的处理，而这种默认处理方式为:
   - 将异常的名称(类型)、异常的原因以及异常出现的位置等信息输出在了控制台（Console窗口）
   - 将程序停止运行（这意味着，出现异常的代码后面的代码将不会再执行）
 
-### 异常示例1
+### 3.1 异常示例1
 
 ```java
 package exception;
@@ -57,7 +57,7 @@ Exception in thread "main" java.lang.ArithmeticException: / by zero
 	at exception.ExceptionDemo.main(ExceptionDemo.java:10)
 ```
 
-### 异常示例2
+### 3.2 异常示例2
 
 ```java
 package exception;
@@ -92,9 +92,9 @@ Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: 6
   - 使用try...catch...进行处理(捕获异常)
   - 使用throws进行处理(抛出异常)
 
-## 异常处理之try...catch...处理
+## 4 异常处理之try...catch...处理
 
-### 语法格式
+### 4.1 语法格式
 
 ```
 try{
@@ -114,70 +114,68 @@ try{
 
 3. 执行完毕后, 程序还可以继续执行try...catch之后的代码
 
-### 代码案例1
+### 4.2 代码案例1
 
 ```java
 
 ```
 
-### 代码案例2
+### 4.3 代码案例2
 
 ```java
 
 ```
 
-### 代码案例3
+### 4.4 代码案例3
 
 ```java
 
 ```
 
-## finally块
+## 5 finally块
 
 - 作用就是确保一定要执行某些代码
 
-### 代码案例
+### 5.1 代码案例
 
 ```java
 
 ```
 
-### 代码案例2
+### 5.2 代码案例2
 
 ```java
 
 ```
 
-### 代码案例3
+### 5.3 代码案例3
 
 ```java
 
 ```
 
-## throw关键字
+## 6 throw关键字
 
 - 当程序发生错误而无法处理的时候,会抛出对应的异常对象
 - 除此之外,在某些时刻,您可能会想要自行抛出异常,例如字异常处理结束后,再将异常抛出,让下一层异常处理块来捕捉,若想要自行抛出异常,您可以使用"throw"关键字,并生成执行的异常对象后抛出.例如:throw new ArithmeticException();
 
-### 代码案例
-
-#### Person
+### 6.1 Person
 
 ```java
 
 ```
 
-#### ThrowDemo
+### 6.2 ThrowDemo
 
 ```java
 
 ```
 
-## 异常处理之throws处理
+## 7 异常处理之throws处理
 
 - 程序中会声明许多的方法,这些方法中可能会因某些错误而引发异常,但是不希望直接在这个方法中处理这些异常,而希望调用这个它的方法来统一处理,这时候可以使用throws关键字来声明这个方法将会抛出的异常
 
-### 语法格式
+### 7.1 语法格式
 
 ```
 ...方法名() throws 异常类名 {
@@ -185,59 +183,39 @@ try{
 }
 ```
 
-### 代码案例
-
-#### Person
+### 7.2 Person
 
 ```java
 
 ```
 
-#### ThrowDemo
+### 7.3 ThrowDemo
 
 ```java
 
 ```
 
-## throws的重写规则
+## 8 自定义异常
 
-###  代码案例
-
-```java
-
-```
-
-## 异常常用方法
-
-### 代码案例
+### 8.1 IllegalAgeException
 
 ```java
 
 ```
 
-## 自定义异常
-
-### 代码案例
-
-#### IllegalAgeException
+### 8.2 Person
 
 ```java
 
 ```
 
-#### Person
+### 8.3 ThrowDemo
 
 ```java
 
 ```
 
-#### ThrowDemo
-
-```java
-
-```
-
-## 总结
+## 9 总结
 
 **什么时候需要try...catch异常, 什么时候需要throws异常?**
 

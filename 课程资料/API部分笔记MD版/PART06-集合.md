@@ -1,8 +1,8 @@
 #  集合
 
-## Collection接口
+## 1 Collection接口
 
-### 概述
+### 1.1 概述
 
 - 数组和集合都是Java中提供的容器
 
@@ -12,7 +12,7 @@
   - 数组一旦指定了长度，长度就不能再改变; 而集合的长度是可以随时改变的
   - 往数组中插入元素非常麻烦,需要将插入位置后面的元素往后移动; 或者删除数组中间位置的某一个元素, 需要将删除位置后的元素往前移动; 而如果往集合中插入元素或者删除集合中的某一个元素,直接使用现成的方法操作即可
 
-### 集合的继承结构
+### 1.2 集合的继承结构
 
 - 由于需求不同，Java就提供了不同的集合类。这多个集合类的数据结构不同，但是它们都是要提供存储和遍历功能的，我们把它们的共性不断的向上提取，最终就形成了集合的继承体系结构图。
 
@@ -33,82 +33,76 @@
   - 学习接口中提供的共性方法
   - 通过实现类创建对象, 调用这些共性方法
 
-### 常用方法
+### 1.3 常用方法
 
-```
-boolean add(E e) 往集合中添加指定元素e
-boolean addAll(Collection c) 将小集合添加到大集合中
-boolean isEmpty() 如果集合中没有任何元素(空集合), 返回true
-boolean contains(Object o) 如果此集合中包含指定元素o, 则返回true
-boolean containsAll(Collection c) 如果此集合中包含指定 集合c 中的所有元素，则返回 true。 
+```java
+boolean add(E e) //往集合中添加指定元素e
+boolean addAll(Collection c) //将小集合添加到大集合中
+boolean isEmpty() //如果集合中没有任何元素(空集合), 返回true
+boolean contains(Object o) //如果此集合中包含指定元素o, 则返回true
+boolean containsAll(Collection c) //如果此集合中包含指定 集合c 中的所有元素，则返回 true。 
 int size() 返回集合的大小(元素个数)
-boolean remove(Object o) 从集合中删除指定的元素o, 删除成功则返回true
-boolean removeAll(Collection c) 删除此集合中那些也包含在指定集合c中的所有元素
-boolean retainAll(Collection c) 仅保留此集合中那些也包含在指定集合c中的元素 
-c1.retainAll(c2) 只保留c1中两个共同的元素 "a","b", 对c2没有影响
-void clear() 删除此集合中的所有元素
-Object[] toArray() 将此集合转成对象数组
-boolean equals(Object o) 比较此 collection 与指定对象是否相等。 
-Iterator<E> iterator() 返回此集合中所有元素组成的迭代器。
+boolean remove(Object o) //从集合中删除指定的元素o, 删除成功则返回true
+boolean removeAll(Collection c) //删除此集合中那些也包含在指定集合c中的所有元素
+boolean retainAll(Collection c) //仅保留此集合中那些也包含在指定集合c中的元素 
+c1.retainAll(c2) //只保留c1中两个共同的元素 "a","b", 对c2没有影响
+void clear() //删除此集合中的所有元素
+Object[] toArray() //将此集合转成对象数组
+boolean equals(Object o) //比较此 collection 与指定对象是否相等。 
+Iterator<E> iterator() //返回此集合中所有元素组成的迭代器。
 ```
 
-### 实例1：CollectionDemo1
+### 1.4 CollectionDemo1
 
 ```java
 
 ```
 
-### 实例2：CollectionDemo2
+### 1.5 CollectionDemo2
 
 ```java
 
 ```
 
-#### Point
+#### 1.6 Point
 
 ```java
 
 ```
 
-### 实例3：CollectionDemo3
+### 1.7 CollectionDemo3
 
 ```java
 
 ```
 
-### 实例4：CollectionDemo4
+### 1.8 CollectionDemo4
 
 ```java
 
 ```
 
-## 集合的遍历
-
-### IteratorDemo
-
- 
+## 2 集合的遍历
 
 ```java
 
 ```
 
-## 增强型for循环
-
-### NewForDemo
+## 3 增强型for循环
 
 ```java
 
 ```
 
-## List集合
+## 4 List集合
 
-### 概述
+### 4.1 概述
 
 - List是一个有序的Collection(List是Collection的子接口)，使用此接口能够精确的控制每个元素插入的位置，能够通过索引(类似于数组的下标)来访问List中的元素，第一个元素的索引为 0，而且允许有相同的元素。
 
 - List 接口存储一组可重复、有序（插入顺序）的对象。
 
-### 特点
+### 4.2 特点
 
 - 元素有下标,可以通过下标访问元素
 
@@ -116,69 +110,69 @@ Iterator<E> iterator() 返回此集合中所有元素组成的迭代器。
 
 - 元素可以重复(包括null)
 
-### List方法测试
+### 4.3 List方法测试
 
-#### ListDemo
-
-```java
-
-```
-
-#### ListDemo2
+#### 4.3.1 ListDemo
 
 ```java
 
 ```
 
-#### ListDemo3
+#### 4.3.2 ListDemo2
 
 ```java
 
 ```
 
-### 集合和数组的转换
-
-#### 集合转换数组:CollectionToArrayDemo
+#### 4.3.3 ListDemo3
 
 ```java
 
 ```
 
-#### 数组转换集合: ArrayToListDemo
+### 4.4 集合和数组的转换
+
+#### 4.4.1 集合转换数组
 
 ```java
 
 ```
 
-### 集合的排序
-
-#### SortListDemo
+#### 4.4.2 数组转换集合
 
 ```java
 
 ```
 
-#### SortListDemo2
+### 4.5 集合的排序
+
+#### 4.5.1 SortListDemo
 
 ```java
 
 ```
 
-#### SortListDemo3
+#### 4.5.2 SortListDemo2
 
 ```java
 
 ```
 
-## Map接口
+#### 4.5.3 SortListDemo3
 
-### 概述
+```java
+
+```
+
+## 5 Map接口
+
+### 5.1 概述
 
 - Map用于保存具有映射关系的数据，因此Map集合里保存着两组值，一组值用于保存Map里的键(key)另外一组值用于保存Map里的值(value)，键和值是一一对应的关系，称为映射。根据键就能找到对应的值，类似于生活中一张身份证对应一个人一样。
 
 - Map的key和value可以是任何引用类型的数据，其中key不允许重复，同一个Map对象的任何两个key通过equals方法比较总是返回false。
 
-### 特点
+### 5.2 特点
 
 - Map集合中每个元素都有两个值, 分别是key(键) 和 value(值)
 - Map集合中的key(键)不允许重复, 在第二次添加已有的key时, value会被会覆盖
@@ -189,7 +183,7 @@ Iterator<E> iterator() 返回此集合中所有元素组成的迭代器。
   - 如果把Map里的所有value放在一起来看，它们又非常类似于一个List：元素与元素之间可以重复，每个元素可以根据索引来查找，只是Map中的索引(也就是key)不是从0开始的整数值，而是任意类型的对象；
   - 如果需要从List集合中取出元素，则需要提供该元素的数字索引；如果需要从Map中取出元素，则需要提供该元素的key。因此，Map有时也被称为字典，或关联数组。
 
-### 继承结构
+### 5.3 继承结构
 
 - Map接口
   - HashMap类
@@ -204,13 +198,13 @@ Iterator<E> iterator() 返回此集合中所有元素组成的迭代器。
     - Hashtable是一个古老的Map实现类，JDK 1.0出现，出现时，Java还没有提供Map接口，命名没有遵守Java的命名规范，与Vector类似的是，尽量少用Hashtable实现类，即使需要创建线程安全的Map实现类，也无须使用Hashtable实现类，可以通过别的方式来解决线程安全问题。
   - TreeMap是Map的子接口SortedMap的的实现类, 是可以支持对内部元素进行排序的类, 也正因为如此, TreeMap的执行效率通常要比HashMap和HashTable慢。
 
-### MapDemo
+### 5.4 MapDemo
 
 ```java
 
 ```
 
-### MapDemo2
+### 5.5 MapDemo2
 
 ```java
 
