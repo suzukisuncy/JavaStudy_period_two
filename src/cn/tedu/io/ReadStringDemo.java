@@ -1,13 +1,11 @@
 package cn.tedu.io;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 
 /**
- * 此案例来学习从文件中读取字符串
+ * 此案例来学习一次性从文件中读取字符串
  */
 public class ReadStringDemo {
     public static void main(String[] args) throws IOException {

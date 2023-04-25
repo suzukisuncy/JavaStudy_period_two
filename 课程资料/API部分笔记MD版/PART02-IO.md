@@ -30,13 +30,15 @@
 
 ### 3.2 处理流
 
-- 是对一个已存在的流的连接和封装,通过所封装的流的功能调用实现数据读写
+- 是对一个**已存在的流**的连接和封装,通过所封装的流的功能调用实现数据读写
 
 ### 3.3 处理流特点
 
 - 处理流的构造方法总是要带一个其他的流对象做参数,一个流对象经过其他流的多次包装,成为流的链接.
 
 - 通常节点流也被称之为低级流.处理流也被称之为高级流或者过滤流
+
+![无标题-2023-04-25-1707](https://gitee.com/paida-spitting-star/image/raw/master/%E6%97%A0%E6%A0%87%E9%A2%98-2023-04-25-1707.png)
 
 ## 4 节点流
 
@@ -396,8 +398,38 @@ public class ReadStringDemo {
 
 #### 5.1.1 复制文件
 
-```java
+![无标题-2023-04-25-1707(2)](https://gitee.com/paida-spitting-star/image/raw/master/%E6%97%A0%E6%A0%87%E9%A2%98-2023-04-25-1707(2).png)
 
+```java
+package cn.tedu.io;
+
+import java.io.*;
+
+/**
+ * 此案例使用缓冲流高效复制文件
+ */
+public class CopyDemo04 {
+    public static void main(String[] args) throws IOException {
+        FileInputStream fis = new FileInputStream("./demo/ZhenDe.jpg");
+        //创建高级流,缓冲字节输入流,绑定低级流
+        BufferedInputStream bis = new BufferedInputStream(fis);
+        FileOutputStream fos = new FileOutputStream("./demo/ZhenDe_04.jpg");
+        //创建高级流,缓冲字节输出流,绑定低级流
+        BufferedOutputStream bos = new BufferedOutputStream(fos);
+        long start = System.currentTimeMillis();
+        int data;
+        //循环通过高级流单字节读取数据
+        while ((data = bis.read()) != -1) {
+            //通过高级流写出该字节数据
+            bos.write(data);
+        }
+        long end = System.currentTimeMillis();
+        System.out.println("复制该图片共耗时:" + (end - start) + "毫秒!");
+        //关闭资源(关闭高级流,会将所连的低级流也一同关闭)
+        bis.close();
+        bos.close();
+    }
+}
 ```
 
 #### 5.1.2 flush
