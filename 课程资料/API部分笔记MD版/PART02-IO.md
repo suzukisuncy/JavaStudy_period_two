@@ -478,6 +478,8 @@ public class BOS_flushDemo {
 
 #### 5.2.2 OOSDemo案例
 
+![image-20230425214429960](https://gitee.com/paida-spitting-star/image/raw/master/image-20230425214429960.png)
+
 ```java
 
 ```
