@@ -77,3 +77,15 @@ private static boolean recursionDir(File dir) {
 }
 ```
 
+### 6 修改类名
+
+①方式一:
+
+直接在类中将类名修改,然后类名会报错,直接按`alt+enter`,选择rename file即可
+
+![image-20230425201041809](https://gitee.com/paida-spitting-star/image/raw/master/image-20230425201041809.png)
+
+②方式二:
+
+选中类名,按`shift+F6`,直接修改类名即可
+
