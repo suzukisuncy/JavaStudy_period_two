@@ -1,11 +1,12 @@
 package cn.tedu.io;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 /**
  * 使用该类的实例,测试对象流的内容
  */
-public class Person {
+public class Person implements Serializable {
     private String name;
     private int age;
     private String gender;
