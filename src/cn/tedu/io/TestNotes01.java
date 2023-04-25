@@ -25,5 +25,6 @@ public class TestNotes01 {
             //将控制台输入的内容写入到文件中
             fos.write(line.getBytes(StandardCharsets.UTF_8));
         }
+        fos.close();
     }
 }
