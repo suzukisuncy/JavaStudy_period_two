@@ -1,8 +1,6 @@
 package cn.tedu.io;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * 通过此案例学习多字节复制文件
