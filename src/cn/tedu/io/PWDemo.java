@@ -14,6 +14,7 @@ import java.io.PrintWriter;
 public class PWDemo {
     public static void main(String[] args) throws FileNotFoundException {
         PrintWriter pw = new PrintWriter("./demo/pw.txt");
+        //按行写出字符串
         pw.println("无竹令人俗,");
         pw.println("无肉使人瘦.");
         pw.println("不俗又不瘦,");
