@@ -796,3 +796,6 @@ public class TestNote02 {
 }
 ```
 
+## 9 总结
+
+![17-二阶段IO流总结](https://gitee.com/paida-spitting-star/image/raw/master/17-%E4%BA%8C%E9%98%B6%E6%AE%B5IO%E6%B5%81%E6%80%BB%E7%BB%93.png)
