@@ -475,17 +475,25 @@ public class BOS_flushDemo {
 ```java
 package cn.tedu.io;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 /**
  * 使用该类的实例,测试对象流的内容
  */
-public class Person {
+public class Person implements Serializable {
+    //固定当前类的版本号为42
+    static final long serialVersionUID = 42L;
     private String name;
     private int age;
     private String gender;
-    private String[] otherInfo;
-
+    /*
+     * transient可以将修饰的属性在进行序列化时,忽略该属性的值,
+     * 当我们反序列化时,改属性的值将不会被读取,以此达到一个对象瘦身的目的,
+     * 从而提高程序的响应速度,减少资源开销
+     */
+    private transient String[] otherInfo;
+    private double salary;
     //生成全参构造
     public Person(String name, int age, String gender, String[] otherInfo) {
         this.name = name;
@@ -580,8 +588,36 @@ public class OOSDemo {
 #### 5.2.3 OISDemo案例
 
 ```java
+package cn.tedu.io;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
+/**
+ * 通过此案例学习使用对象输入流将指定文件中的对象还原为对象
+ */
+public class OISDemo {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
+        FileInputStream fis = new FileInputStream("./demo/person.txt");
+        //创建对象输入流,绑定指定的文件字节输入流,用于将该文件中读取的字节还原为对象
+        ObjectInputStream ois = new ObjectInputStream(fis);
+        /*
+         * Object readObject()
+         * 将文件中的字节数据还原为对象,该对象由于程序不知道是什么类型,所以返回的是Object
+         *
+         */
+        Object p = ois.readObject();
+        System.out.println(p);
+        ois.close();
+    }
+}
 ```
+
+### 5.2.4 版本号冲突
+
+![image-20230427200427921](C:/Users/86132/AppData/Roaming/Typora/typora-user-images/image-20230427200427921.png)
 
 ##  6字节流和字符流
 
