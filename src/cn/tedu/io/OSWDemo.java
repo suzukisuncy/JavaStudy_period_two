@@ -11,7 +11,7 @@ import java.nio.charset.StandardCharsets;
  * ②负责将字符与对应的字节按照指定的字符集进行自动转换方便读写
  */
 public class OSWDemo {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws IOException {
         //低级的文件字节输出流
         FileOutputStream fos = new FileOutputStream("./demo/osw.txt");
         //高级的输出字符转换流,指定编码

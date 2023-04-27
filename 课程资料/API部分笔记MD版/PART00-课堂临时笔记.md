@@ -89,3 +89,8 @@ private static boolean recursionDir(File dir) {
 
 选中类名,按`shift+F6`,直接修改类名即可
 
+### 7 设置编码
+
+- 在使用idea时,一般都会去往**`File → Settings → Editor → File Encodings`**先统一设置全局项目和文件编码
+
+![image-20230427210039769](https://gitee.com/paida-spitting-star/image/raw/master/image-20230427210039769.png)
