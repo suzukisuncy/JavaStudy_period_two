@@ -475,17 +475,25 @@ public class BOS_flushDemo {
 ```java
 package cn.tedu.io;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 /**
  * 使用该类的实例,测试对象流的内容
  */
-public class Person {
+public class Person implements Serializable {
+    //固定当前类的版本号为42
+    static final long serialVersionUID = 42L;
     private String name;
     private int age;
     private String gender;
-    private String[] otherInfo;
-
+    /*
+     * transient可以将修饰的属性在进行序列化时,忽略该属性的值,
+     * 当我们反序列化时,改属性的值将不会被读取,以此达到一个对象瘦身的目的,
+     * 从而提高程序的响应速度,减少资源开销
+     */
+    private transient String[] otherInfo;
+    private double salary;
     //生成全参构造
     public Person(String name, int age, String gender, String[] otherInfo) {
         this.name = name;
@@ -580,8 +588,36 @@ public class OOSDemo {
 #### 5.2.3 OISDemo案例
 
 ```java
+package cn.tedu.io;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
+/**
+ * 通过此案例学习使用对象输入流将指定文件中的对象还原为对象
+ */
+public class OISDemo {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
+        FileInputStream fis = new FileInputStream("./demo/person.txt");
+        //创建对象输入流,绑定指定的文件字节输入流,用于将该文件中读取的字节还原为对象
+        ObjectInputStream ois = new ObjectInputStream(fis);
+        /*
+         * Object readObject()
+         * 将文件中的字节数据还原为对象,该对象由于程序不知道是什么类型,所以返回的是Object
+         *
+         */
+        Object p = ois.readObject();
+        System.out.println(p);
+        ois.close();
+    }
+}
 ```
+
+### 5.2.4 版本号冲突
+
+<img src="https://gitee.com/paida-spitting-star/image/raw/master/uid.png" alt="image-20230427200427921" />
 
 ##  6字节流和字符流
 
@@ -617,31 +653,149 @@ public class OOSDemo {
 
 ## 7 转换流
 
+![image-20230427203358355](https://gitee.com/paida-spitting-star/image/raw/master/image-20230427203358355.png)
+
 ### 7.1 OutputStreamWriter
 
-```java
+![image-20230427204645876](https://gitee.com/paida-spitting-star/image/raw/master/image-20230427204645876.png)
 
+```java
+package cn.tedu.io;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+
+/**
+ * 学习字符流时,必须要掌握转换流的内容,原因:
+ * 字节流和字符流不能直接相连,需要转换流做协调,
+ * 并且转换流具备以下功能:
+ * ①在流链接中,衔接其他的高级字符流和下面的字节流
+ * ②负责将字符与对应的字节按照指定的字符集进行自动转换方便读写
+ */
+public class OSWDemo {
+    public static void main(String[] args) throws Exception {
+        //低级的文件字节输出流
+        FileOutputStream fos = new FileOutputStream("./demo/osw.txt");
+        //高级的输出字符转换流,指定编码
+        OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
+        //利用输出字符流,自动将写出的字符串按照编码写出
+        osw.write("鹅鹅鹅");
+        osw.write("曲颈向刀割");
+        osw.write("拔毛烧开水");
+        osw.write("铁锅炖大鹅");
+        System.out.println("写出完毕!");
+        osw.close();
+    }
+}
 ```
 
 ### 7.2 InputStreamReader
 
-```java
+![image-20230427210457988](https://gitee.com/paida-spitting-star/image/raw/master/image-20230427210457988.png)
 
+```java
+package cn.tedu.io;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+
+/**
+ * 使用输入字符转换流读取文本内容
+ */
+public class ISRDemo {
+    public static void main(String[] args) throws IOException {
+        FileInputStream fis = new FileInputStream("./demo/osw.txt");
+        InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
+        int d;
+        //使用字符流读取内容时,是一个字符一个字符读取,比如一次性可以将"鹅"这个字读进来
+        //而使用字节流读取内容,是一个字节一个字节读取,在UTF-8中,一个中文由三个字节组成,所以读取三次才可以将中文"鹅读取出来
+        while ((d = isr.read()) != -1) {
+            System.out.print((char) d);
+        }
+        isr.close();
+    }
+}
 ```
 
 ## 8 缓冲字符流
 
 ### 8.1 PrintWriter
 
-- **代码案例**1
+- **代码案例**: 连接文件时
+
+![image-20230427212909951](https://gitee.com/paida-spitting-star/image/raw/master/image-20230427212909951.png)
 
 ```java
+package cn.tedu.io;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+
+/**
+ * 缓冲字符流
+ * PrintWriter是实际开发中使用的缓冲字符输出流
+ * 功能:
+ * ①可以提高写出字符的效率
+ * ②可以按行写出字符串
+ * ③可以自动行刷新
+ */
+public class PWDemo {
+    public static void main(String[] args) throws FileNotFoundException {
+        PrintWriter pw = new PrintWriter("./demo/pw.txt");
+        //按行写出字符串
+        pw.println("无竹令人俗,");
+        pw.println("无肉使人瘦.");
+        pw.println("不俗又不瘦,");
+        pw.println("竹笋焖猪肉.");
+        pw.println("出自--<苏轼的竹笋焖猪肉>");
+        pw.close();
+    }
+}
 ```
 
-- **代码案例**2
+- **代码案例**: 模拟连接的不是文件时
+
+![image-20230427213447577](https://gitee.com/paida-spitting-star/image/raw/master/image-20230427213447577.png)
 
 ```java
+package cn.tedu.io;
 
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
+
+/**
+ * 利用PrintWriter实现建议的记事本,并且可以按行写入
+ */
+public class TestNote02 {
+    public static void main(String[] args) throws FileNotFoundException {
+        //创建低级的文件字节输出流 ①绑定文件 ②开启追加模式
+        FileOutputStream fos = new FileOutputStream("./demo/note_pw.txt", true);
+        //创建高级的转换输出字符流 ①衔接字节流和字符流 ②将写出的字符自动按照编码集转换为字节数据
+        OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
+        //创建高级的缓冲字符输出流 ①提高块写文本数据的效率
+        BufferedWriter bw = new BufferedWriter(osw);
+        //创建高级的按行刷新字符流 ①按行插入字符串 ②开启自动行刷新(写一行字符串,回车之后,会自动调用flush方法)
+        PrintWriter pw = new PrintWriter(bw, true);
+        //完成简易记事本的录入
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            String line = scanner.nextLine();
+            if ("exit".equals(line)) {
+                break;
+            }
+            //将控制台录入的字符串写入到文件中
+            pw.println(line);
+        }
+        //释放流资源
+        pw.close();
+    }
+}
 ```
 
+## 9 总结
+
+![17-二阶段IO流总结](https://gitee.com/paida-spitting-star/image/raw/master/17-%E4%BA%8C%E9%98%B6%E6%AE%B5IO%E6%B5%81%E6%80%BB%E7%BB%93.png)

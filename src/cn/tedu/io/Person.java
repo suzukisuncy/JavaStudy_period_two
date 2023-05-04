@@ -7,11 +7,18 @@ import java.util.Arrays;
  * 使用该类的实例,测试对象流的内容
  */
 public class Person implements Serializable {
+    //固定当前类的版本号为42
+    static final long serialVersionUID = 42L;
     private String name;
     private int age;
     private String gender;
-    private String[] otherInfo;
-
+    /*
+     * transient可以将修饰的属性在进行序列化时,忽略该属性的值,
+     * 当我们反序列化时,改属性的值将不会被读取,以此达到一个对象瘦身的目的,
+     * 从而提高程序的响应速度,减少资源开销
+     */
+    private transient String[] otherInfo;
+    private double salary;
     //生成全参构造
     public Person(String name, int age, String gender, String[] otherInfo) {
         this.name = name;
