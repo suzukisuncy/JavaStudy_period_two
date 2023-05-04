@@ -237,13 +237,62 @@ public class TryCatchDemo04 {
 ### 5.1 代码案例
 
 ```java
+package cn.tedu.exception;
 
+/**
+ * finally块
+ * finally是异常处理机制中的最后一块,可以直接跟在try语句块最后一个catch之后
+ */
+public class FinallyDemo {
+    public static void main(String[] args) {
+        System.out.println("程序开始了!");
+        try {
+            String str = "";
+            System.out.println(str.length());
+            //程序遇到return,直接跳出当前方法
+            return;
+        } catch (Exception e) {
+            System.out.println("出现了一个错误");
+        } finally {//一定会被执行
+            System.out.println("必须要执行的内容~~");
+        }
+        System.out.println("程序结束了!");
+    }
+}
 ```
 
 ### 5.2 代码案例2
 
 ```java
+package cn.tedu.exception;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+/**
+ * 通过Finally代码块释放IO资源
+ */
+public class IOCloseDemo01 {
+    public static void main(String[] args) {
+        FileOutputStream fos = null;
+        try {
+            int a = 1 / 0;//模拟出问题
+            fos = new FileOutputStream("demo/fos.txt");
+            fos.write(1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fos != null) {
+                    fos.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
 ```
 
 ### 5.3 代码案例3

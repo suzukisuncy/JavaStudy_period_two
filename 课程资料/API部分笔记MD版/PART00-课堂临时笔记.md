@@ -94,3 +94,14 @@ private static boolean recursionDir(File dir) {
 - 在使用idea时,一般都会去往**`File → Settings → Editor → File Encodings`**先统一设置全局项目和文件编码
 
 ![image-20230427210039769](https://gitee.com/paida-spitting-star/image/raw/master/image-20230427210039769.png)
+
+### 8 生成try.catch
+
+- 针对编译时异常出现时,可以使用**`alt+enter`**,选择下述选项,生成捕获语句
+
+![image-20230504212228684](https://gitee.com/paida-spitting-star/image/raw/master/image-20230504212228684.png)
+
+- 如果出现多个异常,也可以有多种选择(根据实际情况选择)
+
+![image-20230504212617196](https://gitee.com/paida-spitting-star/image/raw/master/image-20230504212617196.png)
+
