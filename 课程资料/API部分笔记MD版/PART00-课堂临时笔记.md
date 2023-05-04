@@ -28,7 +28,7 @@ demo/demo.txt
 
 选中要打开的文件,**`右键→选择Open In→Explorer`**
 
-![image-20230418200710212](https://gitee.com/paida-spitting-star/image/raw/master/image-20230418200710212.png)
+<img src="https://gitee.com/paida-spitting-star/image/raw/master/image-20230418200710212.png" alt="image-20230418200710212" style="zoom: 80%; border: solid;" />
 
 ### 5 IDEA生成方法
 
@@ -83,7 +83,7 @@ private static boolean recursionDir(File dir) {
 
 直接在类中将类名修改,然后类名会报错,直接按`alt+enter`,选择rename file即可
 
-![image-20230425201041809](https://gitee.com/paida-spitting-star/image/raw/master/image-20230425201041809.png)
+<img src="https://gitee.com/paida-spitting-star/image/raw/master/image-20230425201041809.png" alt="image-20230425201041809" style="zoom: 80%; border: solid;"/>
 
 ②方式二:
 
