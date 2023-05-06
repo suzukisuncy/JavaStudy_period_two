@@ -385,13 +385,52 @@ public class ThrowDemo {
 ### 7.2 Person
 
 ```java
+package cn.tedu.exception;
 
+public class Person {
+    private int age;
+
+    public int getAge() {
+        return age;
+    }
+
+    /*
+     * 如果要对外抛出异常,我们会使用throw关键字进行异常的抛出,
+     * 如果抛出的是运行时异常,那么只能在运行过程中发现该异常
+     * 而如果抛出的时编译时异常,那么必须要在方法的后面添加throws关键字
+     * 告知调用者,在编译期时,需要检验该异常,所以在写代码时,就必须要处理该异常
+     */
+    public void setAge(int age) throws Exception {
+        //判断录入的年龄是否符合需求
+        if (age < 0 || age > 100) {
+            //此处主动抛异常(表示抛出异常的动作)
+            throw new Exception("您录入的年龄不合法!!");
+        }
+        this.age = age;
+    }
+}
 ```
 
 ### 7.3 ThrowDemo
 
 ```java
+package cn.tedu.exception;
 
+/**
+ * 模拟异常的抛出
+ */
+public class ThrowDemo {
+    public static void main(String[] args) {
+        Person p = new Person();
+        //满足语法,但是不满业务需求
+        try {
+            p.setAge(230);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("此人年龄:" + p.getAge() + "岁");
+    }
+}
 ```
 
 ## 8 自定义异常
@@ -399,19 +438,86 @@ public class ThrowDemo {
 ### 8.1 IllegalAgeException
 
 ```java
+package cn.tedu.exception;
 
+/**
+ * 自定义异常:非法的年龄异常
+ * 自定义异常步骤:
+ * ①类名要见名知意(一般是XxxException的格式,要求可以直观的表明异常的类型)
+ * ②需要该类直接或者间接继承Exception类(表明当前类是异常子类)
+ * ③提供父类中的所有的构造器
+ */
+public class IllegalAgeException extends Exception {
+    public IllegalAgeException() {
+    }
+
+    public IllegalAgeException(String message) {
+        super(message);
+    }
+
+    public IllegalAgeException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public IllegalAgeException(Throwable cause) {
+        super(cause);
+    }
+
+    public IllegalAgeException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
+}
 ```
 
 ### 8.2 Person
 
 ```java
+package cn.tedu.exception;
 
+public class Person {
+    private int age;
+
+    public int getAge() {
+        return age;
+    }
+
+    /*
+     * 如果要对外抛出异常,我们会使用throw关键字进行异常的抛出,
+     * 如果抛出的是运行时异常,那么只能在运行过程中发现该异常
+     * 而如果抛出的时编译时异常,那么必须要在方法的后面添加throws关键字
+     * 告知调用者,在编译期时,需要检验该异常,所以在写代码时,就必须要处理该异常
+     */
+    public void setAge(int age) throws IllegalAgeException {
+        //判断录入的年龄是否符合需求
+        if (age < 0 || age > 100) {
+            //此处主动抛异常(表示抛出异常的动作)
+            throw new IllegalAgeException("您录入的年龄不合法!!");
+        }
+        this.age = age;
+    }
+}
 ```
 
 ### 8.3 ThrowDemo
 
 ```java
+package cn.tedu.exception;
 
+/**
+ * 模拟异常的抛出
+ */
+public class ThrowDemo {
+    public static void main(String[] args) {
+        Person p = new Person();
+        //满足语法,但是不满业务需求
+        try {
+            p.setAge(230);
+        } catch (IllegalAgeException e) {
+            e.printStackTrace();
+        }
+        System.out.println("此人年龄:" + p.getAge() + "岁");
+    }
+}
 ```
 
 ## 9 总结
