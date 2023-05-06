@@ -2,7 +2,7 @@
 
 ## 1 Socket
 
-### 1.1 IP和端口号
+### 1.1 IP
 
 #### 1.1.1 什么是IP
 
@@ -66,9 +66,9 @@ getInputStream() 返回此套接字的输入流
 getOutputStram() 返回此套接字的输出流
 ```
 
-### 2.2 聊天室
+## 3 聊天室
 
-#### 2.2.1 初始化代码 
+### 3.1 初始Client 
 
 1. 创建socket包,并在包下创建Client类和Server类
 2. 在Client类中定义如下内容
@@ -104,9 +104,12 @@ public class Client {
 }
 ```
 
-3. 在Client中声明[Socket实例](#2 Socket概述),用于搭建TCP连接,并在构造器中实例化该socket
+3. 在Client中声明[Socket实例](#2 Socket概述),用于搭建TCP连接,并在构造器中实例化该socket,并指定IP和端口号
 
-- 其中的[IP]()和端口号可以参考上面的内容
+- 其中的IP可以参考[1.1 IP](###1.1 IP)
+- 端口号可以参考[1.2 什么是端口号](#1.2 什么是端口号)
+
+![image-20230506213621300](https://gitee.com/paida-spitting-star/image/raw/master/image-20230506213621300.png)
 
 ```java
 /**
@@ -140,13 +143,81 @@ public Client() {
 }
 ```
 
-#### 2.2.3 测试
+### 3.2 初始化Server
 
-**切记先运行服务器,****后运行客户端！！！**
+1. 仿照Client类,在Server中也定义构造器、start方法和main方法
 
-#### 2.2.4 常见问题:   
+```java
+package cn.tedu.socket;
 
-表示端口被占用,解决方式：换个没有被占用的端口     
+/**
+ * 聊天室服务器端
+ */
+public class Server {
+    public Server() {
+    }
 
-表示连接被拒绝,因为服务器没启动,解决方式:先启动服务器,然后再启动客户端
+    public void start() {
 
+    }
+
+    public static void main(String[] args) {
+        Server server = new Server();
+        server.start();
+    }
+}
+```
+
+2. 在Server中声明ServerSocket,并且在构造器中实例化ServerSocket,并指定占用端口号
+
+![image-20230506214901662](https://gitee.com/paida-spitting-star/image/raw/master/image-20230506214901662.png)
+
+```java
+/**
+ * java.net.ServerSocket
+ * 是运行在服务器端的,它具有以下两个作用:
+ * ①打开服务器端口(占用一个端口,客户端访问服务器的端口,就是它占用)
+ * ②监听该端口,一旦一个客户端访问服务器,则会立即返回一个Socket实例,并通过这个Socket实例和客户端进行交互
+ */
+private ServerSocket server;
+
+public Server() {
+    try {
+        System.out.println("正在启动服务器...");
+        /*
+         * 实例化ServerSocket时,需要指定要占用的端口,而该端口就是我们Client类要连接的端口号
+         */
+        server = new ServerSocket(8088);
+        System.out.println("服务器启动完毕!!!");
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+```
+
+3. 在start方法中调用accept方法,监听端口
+
+```java
+public void start() {
+    while (true) {
+        try {
+            System.out.println("等待客户端的连接...");
+            /*
+             * 监听当前占用的端口号,并且该方法是一个阻塞方法
+             * 当端口号没有被客户端访问时,程序不会向下执行,一直阻塞在此处,
+             * 当端口号被客户端访问时,会理解返回一个Socket实例,并且程序继续向下运行
+             */
+            Socket socket = server.accept();
+            System.out.println("一个客户端连接了!!!");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### 附加
+
+#### 测试
+
+<font color=red>**一定要先启动服务器!!!再启动客户端!!!**</font>
