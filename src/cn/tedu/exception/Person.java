@@ -1,9 +1,5 @@
 package cn.tedu.exception;
 
-/**
- * @author 老安
- * @data 2023-05-04 21:52
- */
 public class Person {
     private int age;
 

@@ -332,13 +332,42 @@ public class IOCloseDemo02 {
 ### 6.1 Person
 
 ```java
+package cn.tedu.exception;
 
+public class Person {
+    private int age;
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        //判断录入的年龄是否符合需求
+        if (age < 0 || age > 100) {
+            //此处可以抛异常
+            throw new NullPointerException("您录入的年龄不合法!!");
+        }
+        this.age = age;
+    }
+}
 ```
 
 ### 6.2 ThrowDemo
 
 ```java
+package cn.tedu.exception;
 
+/**
+ * 模拟异常的抛出
+ */
+public class ThrowDemo {
+    public static void main(String[] args) {
+        Person p = new Person();
+        //满足语法,但是不满业务需求
+        p.setAge(10000);
+        System.out.println("此人年龄:" + p.getAge() + "岁");
+    }
+}
 ```
 
 ## 7 异常处理之throws处理
