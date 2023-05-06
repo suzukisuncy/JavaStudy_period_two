@@ -1,0 +1,51 @@
+package cn.tedu.socket;
+
+import java.io.IOException;
+import java.net.Socket;
+
+/**
+ * 聊天室的客户端
+ */
+public class Client {
+    /**
+     * java.net.Socket 套接字,原意是插座
+     * Socket封装了TCP协议的通信细节,我们使用它就可以与远端计算机建立TCP连接,并基于一堆流的IO操作完成
+     * 与远端计算机的数据交互
+     */
+    private Socket socket;
+
+    /**
+     * 初始化客户端
+     */
+    public Client() {
+        try {
+            System.out.println("正在连接服务器...");
+            /*
+             * 实例化Socket时,需要传入两个参数:
+             * ①要链接的远端计算机的IP地址
+             * 连接的计算机IP分为两种情况:
+             *  1)如果连接的是非本机,则需要查询对方的IP地址,进行连接
+             *  2)如果连接的是本机,则可以选取如下的值:
+             *      i. 真实IP(通过ipconfig查询出来的)
+             *      ii. 127.0.0.1(会自动映射本机的真实IP)
+             *      iii. localhost(是127.0.0.1的域名)
+             * ②要链接的远端计算机的端口
+             */
+            socket = new Socket("localhost",8088);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 客户端开始工作的方法
+     */
+    public void start() {
+
+    }
+
+    public static void main(String[] args) {
+        Client client = new Client();
+        client.start();
+    }
+}

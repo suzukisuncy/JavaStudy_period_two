@@ -26,6 +26,8 @@ IP是根据TCP/IP协议划定,由32位二进制数组成,而且在因特网上�
 
 2. 在dos窗口输入ipconfig
 
+<img src="https://gitee.com/paida-spitting-star/image/raw/master/image-20230506212751768.png" alt="image-20230506212751768" style="border:solid"/>
+
 ### 1.2 什么是端口号
 
 - 端口号(port number)就是计算机为了给每个网络程序分配一个独一无二的区别符,有了这些端口号,就可以准确定位到具体的程序。
@@ -66,13 +68,77 @@ getOutputStram() 返回此套接字的输出流
 
 ### 2.2 聊天室
 
-#### 2.2.1 服务器端代码
+#### 2.2.1 初始化代码 
 
- 
+1. 创建socket包,并在包下创建Client类和Server类
+2. 在Client类中定义如下内容
 
-#### 2.2.2 客户端代码
+- **构造器**的作用主要是用于初始化客户端的内容,主要是用于做前期准备
+- **start方法**的作用主要是用于执行客户端的工作逻辑
+- **main方法**中只用于书写流程调用内容
 
- 
+```java
+package cn.tedu.socket;
+
+/**
+ * 聊天室的客户端
+ */
+public class Client {
+    /**
+     * 初始化客户端
+     */
+    public Client() {
+    }
+
+    /**
+     * 客户端开始工作的方法
+     */
+    public void start() {
+
+    }
+
+    public static void main(String[] args) {
+        Client client = new Client();
+        client.start();
+    }
+}
+```
+
+3. 在Client中声明[Socket实例](#2 Socket概述),用于搭建TCP连接,并在构造器中实例化该socket
+
+- 其中的[IP]()和端口号可以参考上面的内容
+
+```java
+/**
+ * java.net.Socket 套接字,原意是插座
+ * Socket封装了TCP协议的通信细节,我们使用它就可以与远端计算机建立TCP连接,并基于一堆流的IO操作完成
+ * 与远端计算机的数据交互
+ */
+private Socket socket;
+
+/**
+ * 初始化客户端
+ */
+public Client() {
+    try {
+        System.out.println("正在连接服务器...");
+        /*
+         * 实例化Socket时,需要传入两个参数:
+         * ①要链接的远端计算机的IP地址
+         * 连接的计算机IP分为两种情况:
+         *  1)如果连接的是非本机,则需要查询对方的IP地址,进行连接
+         *  2)如果连接的是本机,则可以选取如下的值:
+         *      i. 真实IP(通过ipconfig查询出来的)
+         *      ii. 127.0.0.1(会自动映射本机的真实IP)
+         *      iii. localhost(是127.0.0.1的域名)
+         * ②要链接的远端计算机的端口
+         */
+        socket = new Socket("localhost",8088);
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+```
 
 #### 2.2.3 测试
 
