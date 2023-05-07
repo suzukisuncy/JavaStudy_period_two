@@ -66,6 +66,17 @@ public class Client {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                /*
+                 * Socket提供的close方法
+                 * ①可以断开和远端计算机的连接,并挥手示意
+                 * ②可以将socket所连接的流进行关闭
+                 */
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

@@ -325,7 +325,49 @@ public void start() {
 }
 ```
 
+3. 测试程序,当客户端输入"exit"时,会退出程序,但是服务器处会报如下错误:
+
+<img src="https://gitee.com/paida-spitting-star/image/raw/master/image-20230507111002043.png" alt="image-20230507111002043" style="border:solid"/>
+
+- **原因:** 是因为基于TCP的底层协议,要求客户端断开连接时,需要和服务器挥手示意,告知服务器客户端断开了,否则就会报错
+
+4. 无论是客户端的流资源释放,还是客户端下线了,去挥手示意,都是必须要实现的,所以适合写在start方法中的try代码块的finally中
+
+```java
+public void start() {
+    try {
+        OutputStream out = socket.getOutputStream();
+        OutputStreamWriter osw = new OutputStreamWriter(out, StandardCharsets.UTF_8);
+        BufferedWriter bw = new BufferedWriter(osw);
+        PrintWriter pw = new PrintWriter(bw, true);
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            String line = scanner.nextLine();
+            if ("exit".equals(line)) {
+                break;
+            }
+            pw.println(line);
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    } finally {
+        try {
+            /*
+             * Socket提供的close方法
+             * ①可以断开和远端计算机的连接,并挥手示意
+             * ②可以将socket所连接的流进行关闭
+             */
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
 ### 3.5 客户端多开
+
+
 
 ## 4 常见问题
 
