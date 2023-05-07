@@ -15,6 +15,7 @@ public class Client {
      * 与远端计算机的数据交互
      */
     private Socket socket;
+    private static String name;
 
     /**
      * 初始化客户端
@@ -62,7 +63,7 @@ public class Client {
                 if ("exit".equals(line)) {
                     break;
                 }
-                pw.println(line);
+                pw.println(name + "说: " + line);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -81,6 +82,8 @@ public class Client {
     }
 
     public static void main(String[] args) {
+        System.out.println("请输入您的用户名:");
+        name = new Scanner(System.in).nextLine();
         Client client = new Client();
         client.start();
     }

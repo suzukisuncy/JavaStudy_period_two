@@ -68,6 +68,8 @@ getOutputStram() 返回此套接字的输出流
 
 ## 3 聊天室
 
+![01-CS模型](https://gitee.com/paida-spitting-star/image/raw/master/01-CS%E6%A8%A1%E5%9E%8B.png)
+
 ### 3.1 初始Client 
 
 1. 创建socket包,并在包下创建Client类和Server类
@@ -365,7 +367,61 @@ public void start() {
 }
 ```
 
-### 3.5 客户端多开
+5. 此时再进行测试,可以发现输入exit时,服务器端不会发生异常,但是强制关闭客户端依旧还是报错,这是不可避免的,因为我们不能彻底约束客户端的行为!!!
+
+### 3.5 客户端起名
+
+1. 在Client类中声明name的全局变量
+
+```java
+public class Client {
+    private Socket socket;
+    private static String name;
+    ...
+}
+```
+
+2. 然后在main方法中,为name属性赋值
+
+```java
+public static void main(String[] args) {
+    System.out.println("请输入您的用户名:");
+    name = new Scanner(System.in).nextLine();
+    Client client = new Client();
+    client.start();
+}
+```
+
+3. 然后在发送字符串时,将name一同发送给服务器
+
+```java
+public void start() {
+    try {
+        OutputStream out = socket.getOutputStream();
+        OutputStreamWriter osw = new OutputStreamWriter(out, StandardCharsets.UTF_8);
+        BufferedWriter bw = new BufferedWriter(osw);
+        PrintWriter pw = new PrintWriter(bw, true);
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            String line = scanner.nextLine();
+            if ("exit".equals(line)) {
+                break;
+            }
+            pw.println(name + "说: " + line);
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    } finally {
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### 3.6 客户端多开
 
 
 
