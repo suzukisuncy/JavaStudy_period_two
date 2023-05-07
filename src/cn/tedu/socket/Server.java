@@ -47,6 +47,34 @@ public class Server {
                  */
                 Socket socket = server.accept();
                 System.out.println("一个客户端连接了!!!");
+                //当有客户端访问时,可以创建一个线程负责和当前客户端进行交互
+                ClientHandler handler = new ClientHandler(socket);
+                Thread t = new Thread(handler);
+                t.start();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Server server = new Server();
+        server.start();
+    }
+
+    /**
+     * 定义线程的任务类,负责和客户端进行交互
+     */
+    private class ClientHandler implements Runnable {
+        private Socket socket;
+
+        public ClientHandler(Socket socket) {
+            this.socket = socket;
+        }
+
+        @Override
+        public void run() {
+            try {
                 /*
                  * Socket的getInputStream方法
                  * 可以获取一个低级的字节输入流,可以读取来自远端计算机发送过来的字节数据
@@ -65,10 +93,5 @@ public class Server {
                 e.printStackTrace();
             }
         }
-    }
-
-    public static void main(String[] args) {
-        Server server = new Server();
-        server.start();
     }
 }

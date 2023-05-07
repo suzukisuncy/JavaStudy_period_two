@@ -442,9 +442,13 @@ public void start() {
 ### 3.7 引入多线程
 
 - 此时测试,会发现多个客户端不能同时向服务器发送内容,服务器只能同一时间和一个客户端进行交互,当多个客户端访问服务器时,需要排队
-- 原因是我们目前的程序都是单线程程序,是没办法解决当前问题的,所以需要引入**多线程**
+- 原因是我们目前的程序都是单线程程序,是没办法解决当前问题的
 
 <img src="https://gitee.com/paida-spitting-star/image/raw/master/image-20230507115134595.png" alt="image-20230507115134595" style="border: solid"/>
+
+- 所以需要引入**多线程**,让主线程负责接受客户端,当客户端来访问时,再创建一条线程负责和客户端进行交互
+
+<img src="https://gitee.com/paida-spitting-star/image/raw/master/image-20230507163813021.png" alt="image-20230507163813021" style="border:solid"/>
 
 
 
