@@ -250,10 +250,76 @@ public void start() {
 
 ![image-20230507100907051](https://gitee.com/paida-spitting-star/image/raw/master/image-20230507100907051.png)
 
+```java
+public void start() {
+    while (true) {
+        try {
+            System.out.println("等待客户端的连接...");
+            Socket socket = server.accept();
+            System.out.println("一个客户端连接了!!!");
+            /*
+             * Socket的getInputStream方法
+             * 可以获取一个低级的字节输入流,可以读取来自远端计算机发送过来的字节数据
+             */
+            InputStream in = socket.getInputStream();
+            //连接输入转换字符流,并指定编码
+            InputStreamReader isr = new InputStreamReader(in, StandardCharsets.UTF_8);
+            //连接缓冲输入字符流
+            BufferedReader br = new BufferedReader(isr);
+            //读取客户端发送的一行字符串
+            String line = br.readLine();
+            System.out.println(line);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+```
 
+### 常见问题
 
-### 附加
-
-#### 测试
+#### 测试问题
 
 ![image-20230507092040868](https://gitee.com/paida-spitting-star/image/raw/master/image-20230507092040868.png)
+
+#### 端口号被占用问题
+
+##### 问题描述
+
+- 当程序启动时,控制台报如下错误,一定是发送了端口号占用的问题
+
+<img src="https://gitee.com/paida-spitting-star/image/raw/master/image-20230507102923841.png" alt="image-20230507102923841" style="border:solid"/>
+
+##### 解决方式
+
+①方式一: 更换端口号
+
+注意: 如果修改了服务器的端口号,客户端连接的端口号也要一同发生改变
+
+②方式二: 杀死现占用端口号的程序
+
+1. 按**`WIN+R`**,敲击cmd,打开DOS窗口
+2. 然后敲击如下命令,该命令会查询出占用端口号的程序
+
+```shell
+netstat -ano|findstr "端口号"
+```
+
+![image-20230507103408733](https://gitee.com/paida-spitting-star/image/raw/master/image-20230507103408733.png)
+
+**注意:** 其中11240是当前这个程序的PID
+
+3. 根据PID值,获取对应的程序名,来防止杀死不该杀死的程序
+
+```shell
+tasklist|findstr "PID值"
+```
+
+![image-20230507103731362](https://gitee.com/paida-spitting-star/image/raw/master/image-20230507103731362.png)
+
+4. 经过检查,该程序是可以关闭的,所以关闭该程序
+
+```shell
+taskkill /f /pid "PID值"
+```
+
+![image-20230507103907216](https://gitee.com/paida-spitting-star/image/raw/master/image-20230507103907216.png)
