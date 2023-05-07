@@ -450,7 +450,61 @@ public void start() {
 
 <img src="https://gitee.com/paida-spitting-star/image/raw/master/image-20230507163813021.png" alt="image-20230507163813021" style="border:solid"/>
 
+1. 在Server类中,将start方法中和客户端进行交互的内容,移动到线程任务类的run方法中
 
+- **注意事项**
+  - ClientHandler是内部类
+  - start方法中在接收一个客户端访问时,一定要创建线程,并且将对客户端生成的socket实例传递给线程任务类,此处使用的是构造器传输
+
+①start方法
+
+```java
+public void start() {
+    while (true) {
+        try {
+            System.out.println("等待客户端的连接...");
+            Socket socket = server.accept();
+            System.out.println("一个客户端连接了!!!");
+            //当有客户端访问时,可以创建一个线程负责和当前客户端进行交互
+            ClientHandler handler = new ClientHandler(socket);
+            Thread t = new Thread(handler);
+            t.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+②ClientHandler类
+
+```java
+/**
+ * 定义线程的任务类,负责和客户端进行交互
+ */
+private class ClientHandler implements Runnable {
+    private Socket socket;
+
+    public ClientHandler(Socket socket) {
+        this.socket = socket;
+    }
+
+    @Override
+    public void run() {
+        try {
+            InputStream in = socket.getInputStream();
+            InputStreamReader isr = new InputStreamReader(in, StandardCharsets.UTF_8);
+            BufferedReader br = new BufferedReader(isr);
+            String line;
+            while ((line = br.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
 
 ## 4 常见问题
 
