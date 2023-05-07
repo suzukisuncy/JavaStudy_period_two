@@ -216,7 +216,7 @@ public void start() {
 }
 ```
 
-### 3.3 客户端发信息,服务器接受
+### 3.3 客户端发一条信息
 
 ![image-20230507100013197](https://gitee.com/paida-spitting-star/image/raw/master/image-20230507100013197.png)
 
@@ -275,21 +275,77 @@ public void start() {
     }
 ```
 
-### 常见问题
+### 3.4 客户端循环发送
 
-#### 测试问题
+1. 在Client类中的start方法中,仿照记事本案例,实现客户端在控制台写一行字符串,可以向服务器发送一行字符串
+
+```java
+public void start() {
+    try {
+        OutputStream out = socket.getOutputStream();
+        OutputStreamWriter osw = new OutputStreamWriter(out, StandardCharsets.UTF_8);
+        BufferedWriter bw = new BufferedWriter(osw);
+        PrintWriter pw = new PrintWriter(bw, true);
+        //仿照记事本实现写一行发一行
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            String line = scanner.nextLine();
+            if ("exit".equals(line)) {
+                break;
+            }
+            pw.println(line);
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+```
+
+2. 在Server的start方法中,循环读取客户端发送的字符串
+
+```java
+public void start() {
+    while (true) {
+        try {
+            System.out.println("等待客户端的连接...");
+            Socket socket = server.accept();
+            System.out.println("一个客户端连接了!!!");
+            InputStream in = socket.getInputStream();
+            InputStreamReader isr = new InputStreamReader(in, StandardCharsets.UTF_8);
+            BufferedReader br = new BufferedReader(isr);
+            //循环读取客户端发送的一行字符串
+            String line;
+            while ((line = br.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### 3.5 客户端多开
+
+## 4 常见问题
+
+### 4.1 测试问题
 
 ![image-20230507092040868](https://gitee.com/paida-spitting-star/image/raw/master/image-20230507092040868.png)
 
-#### 端口号被占用问题
+- 如果服务器不启动,客户端会连接失败
 
-##### 问题描述
+<img src="https://gitee.com/paida-spitting-star/image/raw/master/image-20230507104133171.png" alt="image-20230507104133171" style="border:solid"/>
+
+### 4.2 端口号被占用问题
+
+#### 4.2.1 问题描述
 
 - 当程序启动时,控制台报如下错误,一定是发送了端口号占用的问题
 
 <img src="https://gitee.com/paida-spitting-star/image/raw/master/image-20230507102923841.png" alt="image-20230507102923841" style="border:solid"/>
 
-##### 解决方式
+#### 4.2.2 解决方式
 
 ①方式一: 更换端口号
 

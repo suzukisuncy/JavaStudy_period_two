@@ -56,9 +56,11 @@ public class Server {
                 InputStreamReader isr = new InputStreamReader(in, StandardCharsets.UTF_8);
                 //连接缓冲输入字符流
                 BufferedReader br = new BufferedReader(isr);
-                //读取客户端发送的一行字符串
-                String line = br.readLine();
-                System.out.println(line);
+                //循环读取客户端发送的一行字符串
+                String line;
+                while ((line = br.readLine()) != null) {
+                    System.out.println(line);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

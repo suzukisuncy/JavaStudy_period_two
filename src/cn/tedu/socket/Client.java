@@ -3,6 +3,7 @@ package cn.tedu.socket;
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
 
 /**
  * 聊天室的客户端
@@ -55,7 +56,14 @@ public class Client {
             BufferedWriter bw = new BufferedWriter(osw);
             //和按行写出字符流连接,并且开启自动行刷新
             PrintWriter pw = new PrintWriter(bw, true);
-            pw.println("你好啊,客户端!");
+            Scanner scanner = new Scanner(System.in);
+            while (true) {
+                String line = scanner.nextLine();
+                if ("exit".equals(line)) {
+                    break;
+                }
+                pw.println(line);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
