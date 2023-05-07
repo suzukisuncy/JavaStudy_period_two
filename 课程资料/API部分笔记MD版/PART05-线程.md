@@ -183,6 +183,48 @@ class MyRunnable02 implements Runnable {
 
 - 从上面的运行结果可以看出，main方法(主线程)和run方法(子线程)中的两个for循环中的输出语句交替执行了，说明实现Runnable接口同样也实现了多线程。
 
+### 4.3 简化写法
+
+```java
+package cn.tedu.thread;
+
+/**
+ * 使用匿名内部类简化两种线程的创建方式
+ */
+public class ThreadDemo03 {
+    public static void main(String[] args) {
+        //简化直接继承Thread重写run方法的创建方式
+        Thread t1 = new Thread() {
+            @Override
+            public void run() {
+                for (int i = 0; i < 1000; i++) {
+                    System.out.println("我是毛利小五郎!");
+                }
+            }
+        };
+        //简化实现Runnable重写run方法的创建方式
+        Runnable r1 = new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < 1000; i++) {
+                    System.out.println("我是齐天大圣!!");
+                }
+            }
+        };
+        Thread t2 = new Thread(r1);
+        //通过Lambda表达式简化实现Runnable重写run方法的创建方式
+        Thread t3 = new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                System.out.println("我是武大郎!!");
+            }
+        });
+        t1.start();
+        t2.start();
+        t3.start();
+    }
+}
+```
+
 ## 5 Thread的常用方法和总结
 
 ### 5.1 CurrentThreadDemo
