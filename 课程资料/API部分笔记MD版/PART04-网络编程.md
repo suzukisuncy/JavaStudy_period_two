@@ -425,7 +425,7 @@ public void start() {
 
 1. 点击如下内容
 
-<img src="C:/Users/86132/AppData/Roaming/Typora/typora-user-images/image-20230507113113183.png" alt="image-20230507113113183" style="border:solid"/>
+<img src="https://gitee.com/paida-spitting-star/image/raw/master/image-20230507113113183.png" alt="image-20230507113113183" style="border:solid"/>
 
 2. 在左侧栏中找到要多开的程序,然后点击右侧栏中的**`Modify options`**
 
