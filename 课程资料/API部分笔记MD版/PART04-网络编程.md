@@ -423,6 +423,29 @@ public void start() {
 
 ### 3.6 客户端多开
 
+1. 点击如下内容
+
+<img src="C:/Users/86132/AppData/Roaming/Typora/typora-user-images/image-20230507113113183.png" alt="image-20230507113113183" style="border:solid"/>
+
+2. 在左侧栏中找到要多开的程序,然后点击右侧栏中的**`Modify options`**
+
+<img src="https://gitee.com/paida-spitting-star/image/raw/master/image-20230507113337437.png" alt="image-20230507113337437" style="border: solid; zoom: 33%;"/>
+
+注意: 不同的idea,该设置会略有不同,比如如果是下图样式,可以参考如下配置
+
+<img src="https://gitee.com/paida-spitting-star/image/raw/master/image-20230507113523821.png" alt="image-20230507113523821" style="zoom: 33%;" />
+
+3. 勾选如下的选项,即可多开
+
+<img src="https://gitee.com/paida-spitting-star/image/raw/master/image-20230507113655762.png" alt="image-20230507113655762" style="zoom:50%;border: solid;" />
+
+### 3.7 引入多线程
+
+- 此时测试,会发现多个客户端不能同时向服务器发送内容
+- 原因是我们目前的程序都是单线程程序,是没办法解决当前问题的,所以需要引入多线程
+
+<img src="https://gitee.com/paida-spitting-star/image/raw/master/image-20230507115134595.png" alt="image-20230507115134595" style="border: solid"/>
+
 
 
 ## 4 常见问题
