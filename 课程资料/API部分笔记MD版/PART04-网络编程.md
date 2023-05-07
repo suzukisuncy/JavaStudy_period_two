@@ -216,8 +216,18 @@ public void start() {
 }
 ```
 
+### 3.3 客户端向服务器发送信息
+
+![image-20230507100013197](https://gitee.com/paida-spitting-star/image/raw/master/image-20230507100013197.png)
+
+1. 在Client的start方法中建立流链接
+
+![image-20230427213447577](https://gitee.com/paida-spitting-star/image/raw/master/image-20230427213447577.png)
+
+
+
 ### 附加
 
 #### 测试
 
-<font color=red>**一定要先启动服务器!!!再启动客户端!!!**</font>
+![image-20230507092040868](https://gitee.com/paida-spitting-star/image/raw/master/image-20230507092040868.png)

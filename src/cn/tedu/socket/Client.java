@@ -1,6 +1,7 @@
 package cn.tedu.socket;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.Socket;
 
 /**
@@ -41,7 +42,16 @@ public class Client {
      * 客户端开始工作的方法
      */
     public void start() {
+        try {
+            /*
+             * 通过Socket的getOutputStream方法
+             * 获取字节输出流写出的字节会通过网络发送给远端计算机
+             */
+            OutputStream out = socket.getOutputStream();
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {
