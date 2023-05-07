@@ -5,6 +5,11 @@ package cn.tedu.thread;
  * 多线程可以并发执行多个任务
  * 线程的第一种创建方式:
  * 继承Thread类,并重写run方法,在run方法中定义需要并发执行的任务代码
+ * 这种方式创建线程的优缺点
+ * 优点:结构很简单,便于我们使用匿名内部类创建
+ * 缺点:
+ * ①由于java是单继承,所以通过继承Thread的方式创建的线程子类,就不能再继续继承其余的类了
+ * ②定义线程时,重写run方法,直接将任务定义到了线程中,这导致了线程与任务存在了必然的耦合关系,不利用线程的复用
  */
 public class ThreadDemo01 {
     public static void main(String[] args) {
