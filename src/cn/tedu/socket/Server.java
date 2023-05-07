@@ -1,8 +1,12 @@
 package cn.tedu.socket;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 /**
@@ -43,6 +47,18 @@ public class Server {
                  */
                 Socket socket = server.accept();
                 System.out.println("一个客户端连接了!!!");
+                /*
+                 * Socket的getInputStream方法
+                 * 可以获取一个低级的字节输入流,可以读取来自远端计算机发送过来的字节数据
+                 */
+                InputStream in = socket.getInputStream();
+                //连接输入转换字符流,并指定编码
+                InputStreamReader isr = new InputStreamReader(in, StandardCharsets.UTF_8);
+                //连接缓冲输入字符流
+                BufferedReader br = new BufferedReader(isr);
+                //读取客户端发送的一行字符串
+                String line = br.readLine();
+                System.out.println(line);
             } catch (IOException e) {
                 e.printStackTrace();
             }

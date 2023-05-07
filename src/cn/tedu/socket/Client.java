@@ -1,8 +1,8 @@
 package cn.tedu.socket;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 /**
  * 聊天室的客户端
@@ -32,7 +32,7 @@ public class Client {
              *      iii. localhost(是127.0.0.1的域名)
              * ②要链接的远端计算机的端口
              */
-            socket = new Socket("localhost",8088);
+            socket = new Socket("localhost", 8088);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -46,9 +46,16 @@ public class Client {
             /*
              * 通过Socket的getOutputStream方法
              * 获取字节输出流写出的字节会通过网络发送给远端计算机
+             * 此处获取的是一个低级的字节输出流
              */
             OutputStream out = socket.getOutputStream();
-
+            //和转换输出字符流连接,并且指定编码
+            OutputStreamWriter osw = new OutputStreamWriter(out, StandardCharsets.UTF_8);
+            //和缓冲字符流连接
+            BufferedWriter bw = new BufferedWriter(osw);
+            //和按行写出字符流连接,并且开启自动行刷新
+            PrintWriter pw = new PrintWriter(bw, true);
+            pw.println("你好啊,客户端!");
         } catch (IOException e) {
             e.printStackTrace();
         }

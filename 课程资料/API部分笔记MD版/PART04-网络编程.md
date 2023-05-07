@@ -216,13 +216,39 @@ public void start() {
 }
 ```
 
-### 3.3 客户端向服务器发送信息
+### 3.3 客户端发信息,服务器接受
 
 ![image-20230507100013197](https://gitee.com/paida-spitting-star/image/raw/master/image-20230507100013197.png)
 
 1. 在Client的start方法中建立流链接
 
 ![image-20230427213447577](https://gitee.com/paida-spitting-star/image/raw/master/image-20230427213447577.png)
+
+```java
+public void start() {
+    try {
+        /*
+         * 通过Socket的getOutputStream方法
+         * 获取字节输出流写出的字节会通过网络发送给远端计算机
+         * 此处获取的是一个低级的字节输出流
+         */
+        OutputStream out = socket.getOutputStream();
+        //和转换输出字符流连接,并且指定编码
+        OutputStreamWriter osw = new OutputStreamWriter(out, StandardCharsets.UTF_8);
+        //和缓冲字符流连接
+        BufferedWriter bw = new BufferedWriter(osw);
+        //和按行写出字符流连接,并且开启自动行刷新
+        PrintWriter pw = new PrintWriter(bw, true);
+        pw.println("你好啊,客户端!");
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+```
+
+2. 在Server类中的start方法中,实现接受客户端发送的字符串功能
+
+![image-20230507100907051](https://gitee.com/paida-spitting-star/image/raw/master/image-20230507100907051.png)
 
 
 
