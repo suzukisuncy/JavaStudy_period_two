@@ -18,6 +18,23 @@ public class SleepDemo03 {
                 }
             }
         };
+        Thread huang = new Thread() {
+            public void run() {
+                System.out.println("黄:大锤80!小锤40!开始砸墙!");
+                //5.fori
+                for (int i = 0; i < 5; i++) {
+                    System.out.println("黄:80!");
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                System.out.println("哐啷啷!");
+                System.out.println("黄:大哥!搞定!");
+            }
+        };
         lin.start();
+        huang.start();
     }
 }
