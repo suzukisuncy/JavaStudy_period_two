@@ -28,9 +28,9 @@ public class PriorityDemo {
                 }
             }
         };
-        min.setPriority(1);//设置最低的优先级
-        norm.setPriority(5);//设置中度的优先级(不设置也是5)
-        max.setPriority(10);//设置最高的优先级
+        min.setPriority(Thread.MIN_PRIORITY);//设置最低的优先级,就是1
+        norm.setPriority(Thread.NORM_PRIORITY);//设置中度的优先级(不设置也是5)
+        max.setPriority(Thread.MAX_PRIORITY);//设置最高的优先级,就是10
         min.start();
         norm.start();
         max.start();
