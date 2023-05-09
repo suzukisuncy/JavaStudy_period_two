@@ -405,6 +405,10 @@ public class SleepDemo02 {
 
 ### 7.4 SleepDemo03
 
+![image-20230509210942241](https://gitee.com/paida-spitting-star/image/raw/master/image-20230509210942241.png)
+
+
+
 ### 7.5 DaemonThreadDemo
 
 ```java
