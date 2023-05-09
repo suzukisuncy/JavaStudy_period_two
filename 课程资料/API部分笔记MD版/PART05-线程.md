@@ -346,19 +346,66 @@ public class PriorityDemo {
 
 <font color=red>⑤死亡状态(Dead)：当线程中的run方法执行结束后，或者程序发生异常终止运行后，线程会进入死亡状态。处于死亡状态的线程不能再使用 start 方法启动线程。</font>
 
-### 7.2 SleepDemo
+### 7.2 SleepDemo01
+
+![image-20230509205105459](https://gitee.com/paida-spitting-star/image/raw/master/image-20230509205105459.png)
 
 ```java
+package cn.tedu.thread;
 
+/**
+ * Thread中提供了一个静态的sleep方法
+ * 当线程调用sleep方法后,会进入阻塞状态指定的毫秒,超过这个时间后,会自动进入到就绪状态,当CPU分配时间片后,会继续执行
+ */
+public class SleepDemo01 {
+    public static void main(String[] args) {
+        System.out.println("程序开始了!");
+        try {
+            //1秒=1000毫秒 让线程进入睡眠阻塞5秒时间
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("程序结束了!");
+    }
+}
 ```
 
-### 7.3 SleepDemo2
+### 7.3 SleepDemo02
 
 ```java
+package cn.tedu.thread;
 
+import java.util.Scanner;
+
+/**
+ * 利用sleep写一个倒计时的程序
+ */
+public class SleepDemo02 {
+    public static void main(String[] args) {
+        System.out.println("程序开始了!");
+        try {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("请输入要倒计时的时间!");
+            int time = scanner.nextInt();
+            //变量.forr 生成逆向for循环
+            for (int i = time; i > 0; i--) {
+                System.out.println(i);
+                //没循环一次,睡眠阻塞1秒
+                Thread.sleep(1000);
+            }
+            System.out.println("时间到!");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("程序结束了!");
+    }
+}
 ```
 
-### 7.4 DaemonThreadDemo
+### 7.4 SleepDemo03
+
+### 7.5 DaemonThreadDemo
 
 ```java
 
