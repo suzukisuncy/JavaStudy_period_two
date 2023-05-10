@@ -8,8 +8,8 @@ import java.nio.charset.StandardCharsets;
 public class Demo {
     public static void main(String[] args){
 //        String sourceFileName = "./数据库笔记/tedu.sql";
-        String sourceFileName = "";
-        String targetFileName = new StringBuilder(sourceFileName).insert(sourceFileName.lastIndexOf("."),"_t").toString();
+        String sourceFileName = "课程资料/API部分笔记MD版-繁体/PART05-线程.md";
+        String targetFileName = new StringBuilder(sourceFileName).insert(sourceFileName.lastIndexOf("."),"_繁体").toString();
 
         try (
                 BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(sourceFileName), StandardCharsets.UTF_8));
