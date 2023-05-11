@@ -13,7 +13,7 @@ public class SyncDemo01 {
             public void run() {
                 while (true) {
                     int bean = table.getBean();
-                    System.out.println(getName() + "出手抢一颗豆子,此时豆子数量为:" + (bean - 1));
+                    System.out.println(getName() + "抢一颗豆子,此时豆子数量为:" + (bean - 1));
                 }
             }
         };
@@ -22,7 +22,7 @@ public class SyncDemo01 {
             public void run() {
                 while (true) {
                     int bean = table.getBean();
-                    System.out.println(getName() + "出手抢一颗豆子,此时豆子数量为:" + (bean - 1));
+                    System.out.println(getName() + "抢一颗豆子,此时豆子数量为:" + (bean - 1));
                 }
             }
         };
