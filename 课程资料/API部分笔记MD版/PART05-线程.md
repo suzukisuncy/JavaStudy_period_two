@@ -685,7 +685,7 @@ class Table {
 
 **语法格式**
 
-```
+```java
 synchronized( 同步对象 ){
   需要同步的代码;
 }
