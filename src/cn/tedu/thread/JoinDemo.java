@@ -36,11 +36,25 @@ public class JoinDemo {
                 }
                 System.out.println("show: 显示文字完毕!!!");
                 System.out.println("show: 开始显示图片...");
+                //先等待下载线程运行结束后,再继续执行
+                try {
+                    /*
+                     * 是show线程进入到阻塞状态,直到download执行完毕时,阻塞状态结束
+                     * 理解为插队,show线程让download线程插队
+                     * join方法和sleep方法的区别:
+                     * ①sleep方法,可以让线程阻塞指定的时间
+                     * ②join方法,可以让线程阻塞,但是时间不确定,具体得看插队的线程执行的时间
+                     */
+                    System.out.println("图片此时没下载完,等待下载ing...");
+                    download.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 //开始显示图片之前,判断图片下载状态
                 if (isFinish == false) {
                     throw new RuntimeException("图片加载失败!!");
                 }
-                System.out.println("show: 图片下载完毕!!!");
+                System.out.println("show: 图片显示完毕!!!");
             }
         };
         download.start();
