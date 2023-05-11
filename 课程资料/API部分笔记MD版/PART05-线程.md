@@ -506,7 +506,11 @@ public class DaemonThreadDemo {
 
 ## 8 线程的同步和异步
 
+![image-20230511195612768](https://gitee.com/paida-spitting-star/image/raw/master/tb.png)
+
 ### 8.1 JoinDemo
+
+![image-20230511200611145](https://gitee.com/paida-spitting-star/image/raw/master/image-20230511200611145.png)
 
 ```java
 
