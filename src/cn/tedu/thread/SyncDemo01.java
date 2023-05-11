@@ -34,10 +34,18 @@ public class SyncDemo01 {
 class Table {
     private int beans = 20;//桌子上有20颗豆子
 
-    public int getBean() {
+    /*
+     * 当一个方法使用关键字synchronized时,该方法称为"同步方法"
+     * 同步: 指多个线程之间存在先后顺序执行
+     * 同步方法: 指多个线程调用该方法需要有先后顺序
+     * 多线程的并发安全问题通过让线程排队执行,可以有效解决该问题
+     */
+    public synchronized int getBean() {
         if (beans == 0) {
             throw new RuntimeException("桌子上已经没有豆子了!!!");
         }
+        //礼让线程,主动让出CPU分配给他的时间片
+        Thread.yield();
         return beans--;
     }
 }
