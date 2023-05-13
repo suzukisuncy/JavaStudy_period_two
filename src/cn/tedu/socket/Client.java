@@ -57,6 +57,12 @@ public class Client {
             BufferedWriter bw = new BufferedWriter(osw);
             //和按行写出字符流连接,并且开启自动行刷新
             PrintWriter pw = new PrintWriter(bw, true);
+            //通过socket获取输入流读取服务器发送的信息
+            InputStream in = socket.getInputStream();
+            //连接输入转换字符流,并指定编码
+            InputStreamReader isr = new InputStreamReader(in, StandardCharsets.UTF_8);
+            //连接缓冲输入字符流
+            BufferedReader br = new BufferedReader(isr);
             Scanner scanner = new Scanner(System.in);
             while (true) {
                 String line = scanner.nextLine();
@@ -64,6 +70,9 @@ public class Client {
                     break;
                 }
                 pw.println(name + "说: " + line);
+                //读取服务器回复的一句话
+                line = br.readLine();
+                System.out.println(line);
             }
         } catch (IOException e) {
             e.printStackTrace();

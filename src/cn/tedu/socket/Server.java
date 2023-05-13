@@ -1,9 +1,6 @@
 package cn.tedu.socket;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
@@ -84,10 +81,17 @@ public class Server {
                 InputStreamReader isr = new InputStreamReader(in, StandardCharsets.UTF_8);
                 //连接缓冲输入字符流
                 BufferedReader br = new BufferedReader(isr);
+                //通过socket获取输出流,用于给客户端发送信息
+                OutputStream out = socket.getOutputStream();
+                OutputStreamWriter osw = new OutputStreamWriter(out, StandardCharsets.UTF_8);
+                BufferedWriter bw = new BufferedWriter(osw);
+                PrintWriter pw = new PrintWriter(bw, true);
                 //循环读取客户端发送的一行字符串
                 String line;
                 while ((line = br.readLine()) != null) {
                     System.out.println(line);
+                    //将客户端发送的信息回复给客户端
+                    pw.println(line);
                 }
             } catch (IOException e) {
                 e.printStackTrace();

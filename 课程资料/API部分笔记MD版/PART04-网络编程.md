@@ -506,6 +506,77 @@ private class ClientHandler implements Runnable {
 }
 ```
 
+### 3.8 服务器向客户端回信
+
+![image-20230513205029819](https://gitee.com/paida-spitting-star/image/raw/master/image-20230513205029819.png)
+
+①在Server类中的run方法里,定义输出流向客户端发送信息
+
+```java
+@Override
+public void run() {
+    try {
+        InputStream in = socket.getInputStream();
+        InputStreamReader isr = new InputStreamReader(in, StandardCharsets.UTF_8);
+        BufferedReader br = new BufferedReader(isr);
+        //通过socket获取输出流,用于给客户端发送信息
+        OutputStream out = socket.getOutputStream();
+        OutputStreamWriter osw = new OutputStreamWriter(out, StandardCharsets.UTF_8);
+        BufferedWriter bw = new BufferedWriter(osw);
+        PrintWriter pw = new PrintWriter(bw, true);
+        //循环读取客户端发送的一行字符串
+        String line;
+        while ((line = br.readLine()) != null) {
+            System.out.println(line);
+            //将客户端发送的信息回复给客户端
+            pw.println("客户端回复: " + line);
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+```
+
+②在Client中的start方法中创建输入流,读取服务器发送的信息
+
+```java
+public void start() {
+    try {
+        OutputStream out = socket.getOutputStream();
+        OutputStreamWriter osw = new OutputStreamWriter(out, StandardCharsets.UTF_8);
+        BufferedWriter bw = new BufferedWriter(osw);
+        PrintWriter pw = new PrintWriter(bw, true);
+        //通过socket获取输入流读取服务器发送的信息
+        InputStream in = socket.getInputStream();
+        //连接输入转换字符流,并指定编码
+        InputStreamReader isr = new InputStreamReader(in, StandardCharsets.UTF_8);
+        //连接缓冲输入字符流
+        BufferedReader br = new BufferedReader(isr);
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            String line = scanner.nextLine();
+            if ("exit".equals(line)) {
+                break;
+            }
+            pw.println(name + "说: " + line);
+            //读取服务器回复的一句话
+            line = br.readLine();
+            System.out.println(line);
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    } finally {
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+
+
 ## 4 常见问题
 
 ### 4.1 测试问题
