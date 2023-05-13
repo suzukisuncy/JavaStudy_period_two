@@ -703,7 +703,57 @@ Thread t = new Thread(handler);
 t.start();
 ```
 
-3. 
+3. 由于服务器可能存在异常断开,会导致我们客户端报错,但是这种断开是不能控制的,所以索性就忽略就可以了,所以我们可以在ServerHandler中的run方法中捕获异常但是不需要打印异常
+
+```java
+public void run() {
+    try {
+        InputStream in = socket.getInputStream();
+        InputStreamReader isr = new InputStreamReader(in, StandardCharsets.UTF_8);
+        BufferedReader br = new BufferedReader(isr);
+        String line;
+        while ((line = br.readLine()) != null) {
+            System.out.println(line);
+        }
+    } catch (IOException e) {
+        //此处只有当链接异常断开时,才会触发异常,但是控制不了,所以索性就忽视该异常
+        //e.printStackTrace();
+    }
+}
+```
+
+4. 同样在Server类中,断开连接时,也同时关闭流并且向客户端挥手示意,所以在Server中的run方法中添加finally,关闭资源
+
+```java
+public void run() {
+    try {
+        InputStream in = socket.getInputStream();
+        InputStreamReader isr = new InputStreamReader(in, StandardCharsets.UTF_8);
+        BufferedReader br = new BufferedReader(isr);
+        OutputStream out = socket.getOutputStream();
+        OutputStreamWriter osw = new OutputStreamWriter(out, StandardCharsets.UTF_8);
+        BufferedWriter bw = new BufferedWriter(osw);
+        PrintWriter pw = new PrintWriter(bw, true);
+        allOut = Arrays.copyOf(allOut, allOut.length + 1);
+        allOut[allOut.length - 1] = pw;
+        String line;
+        while ((line = br.readLine()) != null) {
+            System.out.println(line);
+            for (int i = 0; i < allOut.length; i++) {
+                allOut[i].println(line);
+            }
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    } finally {
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
 
 ## 4 常见问题
 
