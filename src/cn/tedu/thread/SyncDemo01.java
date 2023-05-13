@@ -39,6 +39,7 @@ class Table {
      * 同步: 指多个线程之间存在先后顺序执行
      * 同步方法: 指多个线程调用该方法需要有先后顺序
      * 多线程的并发安全问题通过让线程排队执行,可以有效解决该问题
+     * 同步方法的监视器对象是this
      */
     public synchronized int getBean() {
         if (beans == 0) {
