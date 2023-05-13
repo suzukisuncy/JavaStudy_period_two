@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -17,6 +18,7 @@ public class Server {
      * ②监听该端口,一旦一个客户端访问服务器,则会立即返回一个Socket实例,并通过这个Socket实例和客户端进行交互
      */
     private ServerSocket server;
+    private PrintWriter[] allOut = {};
 
     public Server() {
         try {
@@ -86,12 +88,19 @@ public class Server {
                 OutputStreamWriter osw = new OutputStreamWriter(out, StandardCharsets.UTF_8);
                 BufferedWriter bw = new BufferedWriter(osw);
                 PrintWriter pw = new PrintWriter(bw, true);
+                //将该客户端的输出流存入到共享数组allOut中
+                //①对allOut扩容
+                allOut = Arrays.copyOf(allOut, allOut.length + 1);
+                //②将pw存储到allOut中(存储到allOut中的最后一个位置)
+                allOut[allOut.length - 1] = pw;
                 //循环读取客户端发送的一行字符串
                 String line;
                 while ((line = br.readLine()) != null) {
                     System.out.println(line);
-                    //将客户端发送的信息回复给客户端
-                    pw.println(line);
+                    //将客户端发送的信息回复给所有客户端
+                    for (int i = 0; i < allOut.length; i++) {
+                        allOut[i].println(line);
+                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace();

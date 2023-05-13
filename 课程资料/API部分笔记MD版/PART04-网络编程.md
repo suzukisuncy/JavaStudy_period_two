@@ -575,6 +575,47 @@ public void start() {
 }
 ```
 
+### 3.9 实现客户端群聊
+
+![image-20230513211950314](https://gitee.com/paida-spitting-star/image/raw/master/image-20230513211950314.png)
+
+①在Server中添加一个**全局属性**:allOut的空数组,用于存放所有对客户端的输出流
+
+```java
+private PrintWriter[] allOut = {};
+```
+
+②在ClientHandler中的run方法中,将对客户端的输出流,存储到allOut中,并且在收到客户端发送信息后,将信息群发给所有客户端
+
+```java
+public void run() {
+    try {
+        InputStream in = socket.getInputStream();
+        InputStreamReader isr = new InputStreamReader(in, StandardCharsets.UTF_8);
+        BufferedReader br = new BufferedReader(isr);
+        OutputStream out = socket.getOutputStream();
+        OutputStreamWriter osw = new OutputStreamWriter(out, StandardCharsets.UTF_8);
+        BufferedWriter bw = new BufferedWriter(osw);
+        PrintWriter pw = new PrintWriter(bw, true);
+        //将该客户端的输出流存入到共享数组allOut中
+        //①对allOut扩容
+        allOut = Arrays.copyOf(allOut, allOut.length + 1);
+        //②将pw存储到allOut中(存储到allOut中的最后一个位置)
+        allOut[allOut.length - 1] = pw;
+        String line;
+        while ((line = br.readLine()) != null) {
+            System.out.println(line);
+            //将客户端发送的信息回复给所有客户端
+            for (int i = 0; i < allOut.length; i++) {
+                allOut[i].println(line);
+            }
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+```
+
 
 
 ## 4 常见问题
