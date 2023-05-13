@@ -510,7 +510,7 @@ private class ClientHandler implements Runnable {
 
 ![image-20230513205029819](https://gitee.com/paida-spitting-star/image/raw/master/image-20230513205029819.png)
 
-①在Server类中的run方法里,定义输出流向客户端发送信息
+1. 在Server类中的run方法里,定义输出流向客户端发送信息
 
 ```java
 @Override
@@ -537,7 +537,7 @@ public void run() {
 }
 ```
 
-②在Client中的start方法中创建输入流,读取服务器发送的信息
+2. 在Client中的start方法中创建输入流,读取服务器发送的信息
 
 ```java
 public void start() {
@@ -579,13 +579,13 @@ public void start() {
 
 ![image-20230513211950314](https://gitee.com/paida-spitting-star/image/raw/master/image-20230513211950314.png)
 
-①在Server中添加一个**全局属性**:allOut的空数组,用于存放所有对客户端的输出流
+1. 在Server中添加一个**全局属性**:allOut的空数组,用于存放所有对客户端的输出流
 
 ```java
 private PrintWriter[] allOut = {};
 ```
 
-②在ClientHandler中的run方法中,将对客户端的输出流,存储到allOut中,并且在收到客户端发送信息后,将信息群发给所有客户端
+2. 在ClientHandler中的run方法中,将对客户端的输出流,存储到allOut中,并且在收到客户端发送信息后,将信息群发给所有客户端
 
 ```java
 public void run() {
@@ -616,7 +616,94 @@ public void run() {
 }
 ```
 
+3. 启动服务器,运行多个客户端,测试时,发现,多个客户端在发送信息时,出现发送一行信息,才能收到一行信息的情况,原因主要是出现在Client类中如下位置:
 
+```java
+while (true) {
+    String line = scanner.nextLine();
+    if ("exit".equals(line)) {
+        break;
+    }
+    pw.println(name + "说: " + line);
+    //读取服务器回复的一句话
+    line = br.readLine();
+    System.out.println(line);
+}
+```
+
+其中`scanner.nextLine()`这句代码是阻塞方法,只有在控制敲击回车键,程序才会继续向下执行,所以此处导致我们不在控制台敲击回车键,就不能执行`br.readLine();`代码,也就是不能读取服务器转发给各个客户端的信息,如果要解决该问题,需要使用线程,消除此处代码片段之间的互相影响
+
+### 3.10 客户端引入多线程
+
+1. 在Client中,创建ServerHandler负责读取服务器发送的信息,并且将start方法中读取服务器信息的内容移动到ServerHandler中的run方法内部
+
+①ServerHandler
+
+```java
+/**
+ * 该线程负责读取服务器发送的信息
+ */
+private class ServerHandler implements Runnable {
+    @Override
+    public void run() {
+        try {
+            //通过socket获取输入流读取服务器发送的信息
+            InputStream in = socket.getInputStream();
+            //连接输入转换字符流,并指定编码
+            InputStreamReader isr = new InputStreamReader(in, StandardCharsets.UTF_8);
+            //连接缓冲输入字符流
+            BufferedReader br = new BufferedReader(isr);
+            //创建流之后,开始循环读取服务器发送的信息
+            String line;
+            while ((line = br.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+②start方法
+
+```java
+public void start() {
+    try {
+        OutputStream out = socket.getOutputStream();
+        OutputStreamWriter osw = new OutputStreamWriter(out, StandardCharsets.UTF_8);
+        BufferedWriter bw = new BufferedWriter(osw);
+        PrintWriter pw = new PrintWriter(bw, true);
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            String line = scanner.nextLine();
+            if ("exit".equals(line)) {
+                break;
+            }
+            pw.println(name + "说: " + line);
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    } finally {
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+2. 在start方法中,启动线程,并执行读取服务器信息的任务
+
+```java
+//启动一个线程来读取服务器端发送的信息
+ServerHandler handler = new ServerHandler();
+Thread t = new Thread(handler);
+t.start();
+```
+
+3. 
 
 ## 4 常见问题
 

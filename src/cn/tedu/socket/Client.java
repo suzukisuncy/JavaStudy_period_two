@@ -45,6 +45,10 @@ public class Client {
      */
     public void start() {
         try {
+            //启动一个线程来读取服务器端发送的信息
+            ServerHandler handler = new ServerHandler();
+            Thread t = new Thread(handler);
+            t.start();
             /*
              * 通过Socket的getOutputStream方法
              * 获取字节输出流写出的字节会通过网络发送给远端计算机
@@ -57,12 +61,6 @@ public class Client {
             BufferedWriter bw = new BufferedWriter(osw);
             //和按行写出字符流连接,并且开启自动行刷新
             PrintWriter pw = new PrintWriter(bw, true);
-            //通过socket获取输入流读取服务器发送的信息
-            InputStream in = socket.getInputStream();
-            //连接输入转换字符流,并指定编码
-            InputStreamReader isr = new InputStreamReader(in, StandardCharsets.UTF_8);
-            //连接缓冲输入字符流
-            BufferedReader br = new BufferedReader(isr);
             Scanner scanner = new Scanner(System.in);
             while (true) {
                 String line = scanner.nextLine();
@@ -70,9 +68,6 @@ public class Client {
                     break;
                 }
                 pw.println(name + "说: " + line);
-                //读取服务器回复的一句话
-                line = br.readLine();
-                System.out.println(line);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -95,5 +90,30 @@ public class Client {
         name = new Scanner(System.in).nextLine();
         Client client = new Client();
         client.start();
+    }
+
+    /**
+     * 该线程任务负责读取服务器发送的信息
+     */
+    private class ServerHandler implements Runnable {
+        @Override
+        public void run() {
+            try {
+                //通过socket获取输入流读取服务器发送的信息
+                InputStream in = socket.getInputStream();
+                //连接输入转换字符流,并指定编码
+                InputStreamReader isr = new InputStreamReader(in, StandardCharsets.UTF_8);
+                //连接缓冲输入字符流
+                BufferedReader br = new BufferedReader(isr);
+                //创建流之后,开始循环读取服务器发送的信息
+                String line;
+                while ((line = br.readLine()) != null) {
+                    System.out.println(line);
+                }
+            } catch (IOException e) {
+                //此处只有当链接异常断开时,才会触发异常,但是控制不了,所以索性就忽视该异常
+                //e.printStackTrace();
+            }
+        }
     }
 }
