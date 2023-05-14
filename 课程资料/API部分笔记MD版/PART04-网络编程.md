@@ -524,12 +524,11 @@ public void run() {
         OutputStreamWriter osw = new OutputStreamWriter(out, StandardCharsets.UTF_8);
         BufferedWriter bw = new BufferedWriter(osw);
         PrintWriter pw = new PrintWriter(bw, true);
-        //循环读取客户端发送的一行字符串
         String line;
         while ((line = br.readLine()) != null) {
             System.out.println(line);
             //将客户端发送的信息回复给客户端
-            pw.println("客户端回复: " + line);
+            pw.println(line);
         }
     } catch (IOException e) {
         e.printStackTrace();
@@ -746,6 +745,70 @@ public void run() {
     } catch (IOException e) {
         e.printStackTrace();
     } finally {
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+5. 启动测试,测试效果没有问题,但是目前有一点要说明,客户端启动后,会存在两个线程,一个是主线程,一个是ServerHandler的子线程,当客户端输入exit时,意味着主线程结束,但是子线程会结束吗?很明显不会,因为子线程是普通用户线程,所以我们为了实现主线程结束后,子线程也会被同步杀死,可以将子线程设置为**守护线程**,所以在启动ServerHandler线程前,将其设置为守护线程
+
+```java
+ServerHandler handler = new ServerHandler();
+Thread t = new Thread(handler);
+//设置为守护线程
+t.setDaemon(true);
+t.start();
+```
+
+### 3.11 客户单下线
+
+- 客户端下线包含两种情况,一种是客户端输入exit时,正常下线,另一种是直接关闭程序,总之不论是哪种方式,都需要从allOut数组中,取出对下线的客户端的输出流,所以这部分代码适合写在finally中
+
+1. 由于我们在下线时,需要比较输出流内存地址,所以为了能够在finally中使用pw实例,所以需要将pw的作用域提高到全局
+
+```java
+public void run() {
+    PrintWriter pw = null;
+    try {
+        //此处省略
+        pw = new PrintWriter(bw, true);
+    }
+```
+
+2. 在finally中进行取出客户端输出流操作
+
+> 取出思路:
+>
+> ​	①遍历allOut数组
+> ​	②将要删除的元素和数组中的每一个元素进行内存地址的比较,相同的即是要删除的元素
+> ​	③将数组的最后一个元素替换到删除元素的位置
+> ​	④将数组的最后一个元素缩容
+
+```java
+public void run() {
+    PrintWriter pw = null;
+    try {
+        //此处省略
+    } catch (IOException e) {
+        e.printStackTrace();
+    } finally {
+        //将当前客户端的输出流从allOut数组中取出
+        //遍历allOut
+        for (int i = 0; i < allOut.length; i++) {
+            //找到要删除的元素
+            if (allOut[i] == pw) {
+                //将最后一个元素替换到目标元素
+                allOut[i] = allOut[allOut.length - 1];
+                //进行数组的缩容(将数组的最后一个元素删除)
+                allOut = Arrays.copyOf(allOut, allOut.length-1);
+                //由于数组中只会存储一个目标元素,所以找到目标元素取出后,就可以停止遍历了
+                break;
+            }
+        }
         try {
             socket.close();
         } catch (IOException e) {

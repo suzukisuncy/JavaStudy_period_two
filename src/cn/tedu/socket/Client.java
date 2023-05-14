@@ -48,6 +48,8 @@ public class Client {
             //启动一个线程来读取服务器端发送的信息
             ServerHandler handler = new ServerHandler();
             Thread t = new Thread(handler);
+            //设置为守护线程
+            t.setDaemon(true);
             t.start();
             /*
              * 通过Socket的getOutputStream方法

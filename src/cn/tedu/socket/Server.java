@@ -73,6 +73,7 @@ public class Server {
 
         @Override
         public void run() {
+            PrintWriter pw = null;
             try {
                 /*
                  * Socket的getInputStream方法
@@ -87,7 +88,7 @@ public class Server {
                 OutputStream out = socket.getOutputStream();
                 OutputStreamWriter osw = new OutputStreamWriter(out, StandardCharsets.UTF_8);
                 BufferedWriter bw = new BufferedWriter(osw);
-                PrintWriter pw = new PrintWriter(bw, true);
+                pw = new PrintWriter(bw, true);
                 //将该客户端的输出流存入到共享数组allOut中
                 //①对allOut扩容
                 allOut = Arrays.copyOf(allOut, allOut.length + 1);
@@ -105,6 +106,19 @@ public class Server {
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
+                //将当前客户端的输出流从allOut数组中取出
+                //遍历allOut
+                for (int i = 0; i < allOut.length; i++) {
+                    //找到要删除的元素
+                    if (allOut[i] == pw) {
+                        //将最后一个元素替换到目标元素
+                        allOut[i] = allOut[allOut.length - 1];
+                        //进行数组的缩容(将数组的最后一个元素删除)
+                        allOut = Arrays.copyOf(allOut, allOut.length-1);
+                        //由于数组中只会存储一个目标元素,所以找到目标元素取出后,就可以停止遍历了
+                        break;
+                    }
+                }
                 try {
                     socket.close();
                 } catch (IOException e) {
