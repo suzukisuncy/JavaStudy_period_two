@@ -506,13 +506,81 @@ public class DaemonThreadDemo {
 
 ## 8 線程的同步和異步
 
+![image-20230511195612768](https://gitee.com/paida-spitting-star/image/raw/master/tb.png)
+
 ### 8.1 JoinDemo
 
-```java
+![image-20230511200611145](https://gitee.com/paida-spitting-star/image/raw/master/image-20230511200611145.png)
 
+```java
+package cn.tedu.thread;
+
+/**
+ * 線程提供的join方法可以協調線程進入同步運行狀態
+ * 多線程本身就是併發運行的,所以本就是一種異步的狀態
+ * 而異步運行就表示: 多條線程各自執行各自的
+ * 而同步運行則表示: 多條線程在運行時存在了先後的順序
+ */
+public class JoinDemo {
+    static boolean isFinish = false;//表示圖片默認是未下載完
+
+    public static void main(String[] args) {
+        Thread download = new Thread() {
+            public void run() {
+                System.out.println("down: 開始下載圖片...");
+                for (int i = 1; i <= 100; i++) {
+                    System.out.println("已下載" + i + "%");
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                System.out.println("down: 圖片下載完畢!!!");
+                isFinish = true;//表示圖片此時已下載完畢
+            }
+        };
+        Thread show = new Thread() {
+            @Override
+            public void run() {
+                System.out.println("show: 開始顯示文字...");
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("show: 顯示文字完畢!!!");
+                System.out.println("show: 開始顯示圖片...");
+                //先等待下載線程運行結束後,再繼續執行
+                try {
+                    /*
+                     * 是show線程進入到阻塞狀態,直到download執行完畢時,阻塞狀態結束
+                     * 理解爲插隊,show線程讓download線程插隊
+                     * join方法和sleep方法的區別:
+                     * ①sleep方法,可以讓線程阻塞指定的時間
+                     * ②join方法,可以讓線程阻塞,但是時間不確定,具體得看插隊的線程執行的時間
+                     */
+                    System.out.println("圖片此時沒下載完,等待下載ing...");
+                    download.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                //開始顯示圖片之前,判斷圖片下載狀態
+                if (isFinish == false) {
+                    throw new RuntimeException("圖片加載失敗!!");
+                }
+                System.out.println("show: 圖片顯示完畢!!!");
+            }
+        };
+        download.start();
+        show.start();
+    }
+}
 ```
 
 ## 9 同步鎖
+
+![image-20230511204857970](https://gitee.com/paida-spitting-star/image/raw/master/image-20230511204857970.png)
 
 ### 9.1 同步方法
 
@@ -544,8 +612,68 @@ public class DaemonThreadDemo {
 
 - **示例1: SyncDemo1**
 
-```java
+![image-20230511213109280](https://gitee.com/paida-spitting-star/image/raw/master/image-20230511213109280.png)
 
+- 出現併發安全問題
+
+![image-20230511213458052](https://gitee.com/paida-spitting-star/image/raw/master/image-20230511213458052.png)
+
+- 解決方法,使用同步方法
+
+![image-20230511214842686](https://gitee.com/paida-spitting-star/image/raw/master/image-20230511214842686.png)
+
+```java
+package cn.tedu.thread;
+
+/**
+ * 多線程併發安全問題
+ * 當多個線程併發操作同一臨界資源時,由於線程的切換存在不可確定性,這就會導致線程的切換順序出現混亂,而產生各種的邏輯錯誤
+ * 而臨界資源就是指操作資源的完整過程應該同一時刻只能由單線程執行
+ */
+public class SyncDemo01 {
+    public static void main(String[] args) {
+        Table table = new Table();
+        Thread t1 = new Thread("白露") {
+            @Override
+            public void run() {
+                while (true) {
+                    int bean = table.getBean();
+                    System.out.println(getName() + "搶一顆豆子,此時豆子數量爲:" + (bean - 1));
+                }
+            }
+        };
+        Thread t2 = new Thread("青雀") {
+            @Override
+            public void run() {
+                while (true) {
+                    int bean = table.getBean();
+                    System.out.println(getName() + "搶一顆豆子,此時豆子數量爲:" + (bean - 1));
+                }
+            }
+        };
+        t1.start();
+        t2.start();
+    }
+}
+
+class Table {
+    private int beans = 20;//桌子上有20顆豆子
+
+    /*
+     * 當一個方法使用關鍵字synchronized時,該方法稱爲"同步方法"
+     * 同步: 指多個線程之間存在先後順序執行
+     * 同步方法: 指多個線程調用該方法需要有先後順序
+     * 多線程的併發安全問題通過讓線程排隊執行,可以有效解決該問題
+     */
+    public synchronized int getBean() {
+        if (beans == 0) {
+            throw new RuntimeException("桌子上已經沒有豆子了!!!");
+        }
+        //禮讓線程,主動讓出CPU分配給他的時間片
+        Thread.yield();
+        return beans--;
+    }
+}
 ```
 
 ### 9.2 同步代碼塊
@@ -557,7 +685,7 @@ public class DaemonThreadDemo {
 
 **語法格式**
 
-```
+```java
 synchronized( 同步對象 ){
   需要同步的代碼;
 }
@@ -575,25 +703,110 @@ synchronized( 同步對象 ){
 - **代碼案例**
 
 ```java
+package cn.tedu.thread;
 
+/**
+ * 同步塊的應用
+ * 有效的縮小同步範圍,並可以在保證併發安全的情況下,儘可能的提高併發效率
+ */
+public class SyncDemo02 {
+    public static void main(String[] args) {
+        Shop shop = new Shop();
+        Thread t1 = new Thread("繆鋮航") {
+            @Override
+            public void run() {
+                shop.buy();
+            }
+        };
+        Thread t2 = new Thread("薛宏舉") {
+            @Override
+            public void run() {
+                shop.buy();
+            }
+        };
+        t1.start();
+        t2.start();
+    }
+}
+
+class Shop {
+    public void buy() {
+        try {
+            Thread t = Thread.currentThread();
+            System.out.println(t.getName() + ": 正在挑衣服...");
+            Thread.sleep(5000);
+            /*
+             * 同步塊在指定同步監視器對象時,可以是任何引用類型實例,
+             * 只要保證多個執行該代碼片段的線程看到的這個對象是"同一個"即可
+             * 此處使用this this代表當前實例化對象的引用,也就是調用buy方法的實例對象
+             * t1線程中調用buy方法時,this指向的是shop實例,而t2線程也是shop實例,所以此處可以使用this
+             */
+            synchronized (this) {
+                System.out.println(t.getName() + ": 正在試衣服...");
+                Thread.sleep(5000);
+            }
+            System.out.println(t.getName() + ": 結賬離開!!!");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
 ```
 
-### 9.3 靜態同步方法
+### 9.3 互斥鎖
+
+![image-20230513201754584](https://gitee.com/paida-spitting-star/image/raw/master/image-20230513201754584.png)
 
 ```java
+package cn.tedu.thread;
 
-```
+/**
+ * 互斥鎖
+ * 當使用多個synchronized關鍵字鎖定多個代碼片段,並且指定的鎖對象都是相同的,那麼這些代碼片段之間就是互斥的
+ */
+public class SyncDemo03 {
+    public static void main(String[] args) {
+        Person person = new Person();
+        Thread t1 = new Thread() {
+            @Override
+            public void run() {
+                person.eat();
+            }
+        };
+        Thread t2 = new Thread() {
+            @Override
+            public void run() {
+                person.breath();
+            }
+        };
+        t1.start();
+        t2.start();
+    }
+}
 
-### 9.4 互斥鎖
+class Person {
+    public synchronized void eat() {
+        try {
+            Thread t = Thread.currentThread();
+            System.out.println(t.getName() + ": 正在吃飯...");
+            Thread.sleep(5000);
+            System.out.println(t.getName() + ": 吃飯完畢!!!");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
-```java
-
-```
-
-### 9.5 死鎖
-
-```java
-
+    public synchronized void breath() {
+        try {
+            Thread t = Thread.currentThread();
+            System.out.println(t.getName() + ": 正在呼吸...");
+            Thread.sleep(5000);
+            System.out.println(t.getName() + ": 呼吸完畢!!!");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
 ```
 
 ## 10 線程池

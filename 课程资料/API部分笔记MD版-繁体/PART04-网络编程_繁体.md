@@ -506,6 +506,383 @@ private class ClientHandler implements Runnable {
 }
 ```
 
+### 3.8 服務器向客戶端回信
+
+![image-20230513205029819](https://gitee.com/paida-spitting-star/image/raw/master/image-20230513205029819.png)
+
+1. 在Server類中的run方法裏,定義輸出流向客戶端發送信息
+
+```java
+@Override
+public void run() {
+    try {
+        InputStream in = socket.getInputStream();
+        InputStreamReader isr = new InputStreamReader(in, StandardCharsets.UTF_8);
+        BufferedReader br = new BufferedReader(isr);
+        //通過socket獲取輸出流,用於給客戶端發送信息
+        OutputStream out = socket.getOutputStream();
+        OutputStreamWriter osw = new OutputStreamWriter(out, StandardCharsets.UTF_8);
+        BufferedWriter bw = new BufferedWriter(osw);
+        PrintWriter pw = new PrintWriter(bw, true);
+        String line;
+        while ((line = br.readLine()) != null) {
+            System.out.println(line);
+            //將客戶端發送的信息回覆給客戶端
+            pw.println(line);
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+```
+
+2. 在Client中的start方法中創建輸入流,讀取服務器發送的信息
+
+```java
+public void start() {
+    try {
+        OutputStream out = socket.getOutputStream();
+        OutputStreamWriter osw = new OutputStreamWriter(out, StandardCharsets.UTF_8);
+        BufferedWriter bw = new BufferedWriter(osw);
+        PrintWriter pw = new PrintWriter(bw, true);
+        //通過socket獲取輸入流讀取服務器發送的信息
+        InputStream in = socket.getInputStream();
+        //連接輸入轉換字符流,並指定編碼
+        InputStreamReader isr = new InputStreamReader(in, StandardCharsets.UTF_8);
+        //連接緩衝輸入字符流
+        BufferedReader br = new BufferedReader(isr);
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            String line = scanner.nextLine();
+            if ("exit".equals(line)) {
+                break;
+            }
+            pw.println(name + "說: " + line);
+            //讀取服務器回覆的一句話
+            line = br.readLine();
+            System.out.println(line);
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    } finally {
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### 3.9 實現客戶端羣聊
+
+![image-20230513211950314](https://gitee.com/paida-spitting-star/image/raw/master/image-20230513211950314.png)
+
+1. 在Server中添加一個**全局屬性**:allOut的空數組,用於存放所有對客戶端的輸出流
+
+```java
+private PrintWriter[] allOut = {};
+```
+
+2. 在ClientHandler中的run方法中,將對客戶端的輸出流,存儲到allOut中,並且在收到客戶端發送信息後,將信息羣發給所有客戶端
+
+```java
+public void run() {
+    try {
+        InputStream in = socket.getInputStream();
+        InputStreamReader isr = new InputStreamReader(in, StandardCharsets.UTF_8);
+        BufferedReader br = new BufferedReader(isr);
+        OutputStream out = socket.getOutputStream();
+        OutputStreamWriter osw = new OutputStreamWriter(out, StandardCharsets.UTF_8);
+        BufferedWriter bw = new BufferedWriter(osw);
+        PrintWriter pw = new PrintWriter(bw, true);
+        //將該客戶端的輸出流存入到共享數組allOut中
+        //①對allOut擴容
+        allOut = Arrays.copyOf(allOut, allOut.length + 1);
+        //②將pw存儲到allOut中(存儲到allOut中的最後一個位置)
+        allOut[allOut.length - 1] = pw;
+        String line;
+        while ((line = br.readLine()) != null) {
+            System.out.println(line);
+            //將客戶端發送的信息回覆給所有客戶端
+            for (int i = 0; i < allOut.length; i++) {
+                allOut[i].println(line);
+            }
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+```
+
+3. 啓動服務器,運行多個客戶端,測試時,發現,多個客戶端在發送信息時,出現發送一行信息,才能收到一行信息的情況,原因主要是出現在Client類中如下位置:
+
+```java
+while (true) {
+    String line = scanner.nextLine();
+    if ("exit".equals(line)) {
+        break;
+    }
+    pw.println(name + "說: " + line);
+    //讀取服務器回覆的一句話
+    line = br.readLine();
+    System.out.println(line);
+}
+```
+
+其中`scanner.nextLine()`這句代碼是阻塞方法,只有在控制敲擊回車鍵,程序才會繼續向下執行,所以此處導致我們不在控制檯敲擊回車鍵,就不能執行`br.readLine();`代碼,也就是不能讀取服務器轉發給各個客戶端的信息,如果要解決該問題,需要使用線程,消除此處代碼片段之間的互相影響
+
+### 3.10 客戶端引入多線程
+
+1. 在Client中,創建ServerHandler負責讀取服務器發送的信息,並且將start方法中讀取服務器信息的內容移動到ServerHandler中的run方法內部
+
+①ServerHandler
+
+```java
+/**
+ * 該線程負責讀取服務器發送的信息
+ */
+private class ServerHandler implements Runnable {
+    @Override
+    public void run() {
+        try {
+            //通過socket獲取輸入流讀取服務器發送的信息
+            InputStream in = socket.getInputStream();
+            //連接輸入轉換字符流,並指定編碼
+            InputStreamReader isr = new InputStreamReader(in, StandardCharsets.UTF_8);
+            //連接緩衝輸入字符流
+            BufferedReader br = new BufferedReader(isr);
+            //創建流之後,開始循環讀取服務器發送的信息
+            String line;
+            while ((line = br.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+②start方法
+
+```java
+public void start() {
+    try {
+        OutputStream out = socket.getOutputStream();
+        OutputStreamWriter osw = new OutputStreamWriter(out, StandardCharsets.UTF_8);
+        BufferedWriter bw = new BufferedWriter(osw);
+        PrintWriter pw = new PrintWriter(bw, true);
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            String line = scanner.nextLine();
+            if ("exit".equals(line)) {
+                break;
+            }
+            pw.println(name + "說: " + line);
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    } finally {
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+2. 在start方法中,啓動線程,並執行讀取服務器信息的任務
+
+```java
+//啓動一個線程來讀取服務器端發送的信息
+ServerHandler handler = new ServerHandler();
+Thread t = new Thread(handler);
+t.start();
+```
+
+3. 由於服務器可能存在異常斷開,會導致我們客戶端報錯,但是這種斷開是不能控制的,所以索性就忽略就可以了,所以我們可以在ServerHandler中的run方法中捕獲異常但是不需要打印異常
+
+```java
+public void run() {
+    try {
+        InputStream in = socket.getInputStream();
+        InputStreamReader isr = new InputStreamReader(in, StandardCharsets.UTF_8);
+        BufferedReader br = new BufferedReader(isr);
+        String line;
+        while ((line = br.readLine()) != null) {
+            System.out.println(line);
+        }
+    } catch (IOException e) {
+        //此處只有當鏈接異常斷開時,才會觸發異常,但是控制不了,所以索性就忽視該異常
+        //e.printStackTrace();
+    }
+}
+```
+
+4. 同樣在Server類中,斷開連接時,也同時關閉流並且向客戶端揮手示意,所以在Server中的run方法中添加finally,關閉資源
+
+```java
+public void run() {
+    try {
+        InputStream in = socket.getInputStream();
+        InputStreamReader isr = new InputStreamReader(in, StandardCharsets.UTF_8);
+        BufferedReader br = new BufferedReader(isr);
+        OutputStream out = socket.getOutputStream();
+        OutputStreamWriter osw = new OutputStreamWriter(out, StandardCharsets.UTF_8);
+        BufferedWriter bw = new BufferedWriter(osw);
+        PrintWriter pw = new PrintWriter(bw, true);
+        allOut = Arrays.copyOf(allOut, allOut.length + 1);
+        allOut[allOut.length - 1] = pw;
+        String line;
+        while ((line = br.readLine()) != null) {
+            System.out.println(line);
+            for (int i = 0; i < allOut.length; i++) {
+                allOut[i].println(line);
+            }
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    } finally {
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+5. 啓動測試,測試效果沒有問題,但是目前有一點要說明,客戶端啓動後,會存在兩個線程,一個是主線程,一個是ServerHandler的子線程,當客戶端輸入exit時,意味着主線程結束,但是子線程會結束嗎?很明顯不會,因爲子線程是普通用戶線程,所以我們爲了實現主線程結束後,子線程也會被同步殺死,可以將子線程設置爲**守護線程**,所以在啓動ServerHandler線程前,將其設置爲守護線程
+
+```java
+ServerHandler handler = new ServerHandler();
+Thread t = new Thread(handler);
+//設置爲守護線程
+t.setDaemon(true);
+t.start();
+```
+
+### 3.11 客戶端下線
+
+- 客戶端下線包含兩種情況,一種是客戶端輸入exit時,正常下線,另一種是直接關閉程序,總之不論是哪種方式,都需要從allOut數組中,取出對下線的客戶端的輸出流,所以這部分代碼適合寫在finally中
+
+1. 由於我們在下線時,需要比較輸出流內存地址,所以爲了能夠在finally中使用pw實例,所以需要將pw的作用域提高到全局
+
+```java
+public void run() {
+    PrintWriter pw = null;
+    try {
+        //此處省略
+        pw = new PrintWriter(bw, true);
+    }
+```
+
+2. 在finally中進行取出客戶端輸出流操作
+
+> 取出思路:
+>
+> ​	①遍歷allOut數組
+> ​	②將要刪除的元素和數組中的每一個元素進行內存地址的比較,相同的即是要刪除的元素
+> ​	③將數組的最後一個元素替換到刪除元素的位置
+> ​	④將數組的最後一個元素縮容
+
+```java
+public void run() {
+    PrintWriter pw = null;
+    try {
+        //此處省略
+    } catch (IOException e) {
+        e.printStackTrace();
+    } finally {
+        //將當前客戶端的輸出流從allOut數組中取出
+        //遍歷allOut
+        for (int i = 0; i < allOut.length; i++) {
+            //找到要刪除的元素
+            if (allOut[i] == pw) {
+                //將最後一個元素替換到目標元素
+                allOut[i] = allOut[allOut.length - 1];
+                //進行數組的縮容(將數組的最後一個元素刪除)
+                allOut = Arrays.copyOf(allOut, allOut.length-1);
+                //由於數組中只會存儲一個目標元素,所以找到目標元素取出後,就可以停止遍歷了
+                break;
+            }
+        }
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+3.12 廣播在線人數
+
+- 廣播通知的操作在當前案例會出現多次
+  - 當用戶上線時,需要廣播所有客戶端
+  - 當用戶下線時,需要廣播所有客戶端
+  - 當一個客戶端發送信息時,需要廣播所有客戶端
+
+1. 在Server中的ClientHandler類中,添加一個廣播通知的方法
+
+```java
+/**
+ * 廣播通知所有客戶端
+ *
+ * @param message 廣播的信息
+ */
+private void sendMessage(String message) {
+    for (int i = 0; i < allOut.length; i++) {
+        allOut[i].println(message);
+    }
+}
+```
+
+2. 調用該方法
+
+```java
+public void run() {
+    PrintWriter pw = null;
+    try {
+        InputStream in = socket.getInputStream();
+        InputStreamReader isr = new InputStreamReader(in, StandardCharsets.UTF_8);
+        BufferedReader br = new BufferedReader(isr);
+        OutputStream out = socket.getOutputStream();
+        OutputStreamWriter osw = new OutputStreamWriter(out, StandardCharsets.UTF_8);
+        BufferedWriter bw = new BufferedWriter(osw);
+        pw = new PrintWriter(bw, true);
+        allOut = Arrays.copyOf(allOut, allOut.length + 1);一個位
+        allOut[allOut.length - 1] = pw;
+        //廣播通知所有客戶端該用戶上線了
+        sendMessage("一個用戶上線了!當前在線人數:" + allOut.length);
+        String line;
+        while ((line = br.readLine()) != null) {
+            System.out.println(line);
+            //將客戶端發送的信息回覆給所有客戶端
+            sendMessage(line);
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    } finally {
+        for (int i = 0; i < allOut.length; i++) {
+            if (allOut[i] == pw) {
+                allOut[i] = allOut[allOut.length - 1];)
+                allOut = Arrays.copyOf(allOut, allOut.length - 1);
+                break;
+            }
+        }
+        //廣播通知所有客戶端用戶下線了
+        sendMessage("一個用戶下線了,當前在線人數:" + allOut.length);
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+```
+
 ## 4 常見問題
 
 ### 4.1 測試問題
