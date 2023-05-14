@@ -44,7 +44,7 @@ public class CollectionDemo03 {
         c1.retainAll(c3);
         System.out.println("c1 = " + c1);
         System.out.println("c3 = " + c3);
-        c1.add("爷爷");
+        c1.add("小明");
         /*
          * boolean removeAll(Collection c);
          * 将当前集合中和给定集合中共有的元素删除
