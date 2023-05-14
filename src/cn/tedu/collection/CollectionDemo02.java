@@ -27,6 +27,7 @@ public class CollectionDemo02 {
          * alt+insert→equals and hashcode→Next→Next→Finish
          */
         boolean contains = c.contains(p);
+        Point p2 = new Point(3, 4);
         System.out.println("集合c中是否包含给定的(3,4)点:" + contains);
     }
 }
