@@ -2,11 +2,15 @@ package cn.tedu.collection;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 
 public class CollectionDemo02 {
     public static void main(String[] args) {
-        Collection c = new ArrayList();
+        //Collection c = new ArrayList();
+        Collection c = new HashSet();//不可重复集合,底层也是通过equals方法判断元素是否重复
         c.add(new Point(1, 2));
+        c.add(new Point(3, 4));
+        //ArrayList是可以存储重复元素的
         c.add(new Point(3, 4));
         c.add(new Point(5, 6));
         c.add(new Point(7, 8));
@@ -27,7 +31,14 @@ public class CollectionDemo02 {
          * alt+insert→equals and hashcode→Next→Next→Finish
          */
         boolean contains = c.contains(p);
-        Point p2 = new Point(3, 4);
         System.out.println("集合c中是否包含给定的(3,4)点:" + contains);
+        /*
+         * boolean remove(Object o);
+         * 如果集合中存在给定的元素,则删除
+         * 底层也是通过equals的比较结果来判断是否存在
+         * 会删除最早出现的那一个
+         */
+        c.remove(p);
+        System.out.println(c);
     }
 }
