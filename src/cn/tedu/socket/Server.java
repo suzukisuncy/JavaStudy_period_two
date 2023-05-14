@@ -94,14 +94,14 @@ public class Server {
                 allOut = Arrays.copyOf(allOut, allOut.length + 1);
                 //②将pw存储到allOut中(存储到allOut中的最后一个位置)
                 allOut[allOut.length - 1] = pw;
+                //广播通知所有客户端该用户上线了
+                sendMessage("一个用户上线了!当前在线人数:" + allOut.length);
                 //循环读取客户端发送的一行字符串
                 String line;
                 while ((line = br.readLine()) != null) {
                     System.out.println(line);
                     //将客户端发送的信息回复给所有客户端
-                    for (int i = 0; i < allOut.length; i++) {
-                        allOut[i].println(line);
-                    }
+                    sendMessage(line);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -116,17 +116,29 @@ public class Server {
                         //将最后一个元素替换到目标元素
                         allOut[i] = allOut[allOut.length - 1];
                         //进行数组的缩容(将数组的最后一个元素删除)
-                        allOut = Arrays.copyOf(allOut, allOut.length-1);
+                        allOut = Arrays.copyOf(allOut, allOut.length - 1);
                         //由于数组中只会存储一个目标元素,所以找到目标元素取出后,就可以停止遍历了
                         break;
                     }
-
                 }
+                //广播通知所有客户端用户下线了
+                sendMessage("一个用户下线了,当前在线人数:" + allOut.length);
                 try {
                     socket.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }
+        }
+
+        /**
+         * 广播通知所有客户端
+         *
+         * @param message 广播的信息
+         */
+        private void sendMessage(String message) {
+            for (int i = 0; i < allOut.length; i++) {
+                allOut[i].println(message);
             }
         }
     }

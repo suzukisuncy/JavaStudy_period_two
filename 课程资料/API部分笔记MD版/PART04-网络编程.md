@@ -764,7 +764,7 @@ t.setDaemon(true);
 t.start();
 ```
 
-### 3.11 客户单下线
+### 3.11 客户端下线
 
 - 客户端下线包含两种情况,一种是客户端输入exit时,正常下线,另一种是直接关闭程序,总之不论是哪种方式,都需要从allOut数组中,取出对下线的客户端的输出流,所以这部分代码适合写在finally中
 
@@ -816,6 +816,71 @@ public void run() {
         }
     }
 }
+```
+
+3.12 广播在线人数
+
+- 广播通知的操作在当前案例会出现多次
+  - 当用户上线时,需要广播所有客户端
+  - 当用户下线时,需要广播所有客户端
+  - 当一个客户端发送信息时,需要广播所有客户端
+
+1. 在Server中的ClientHandler类中,添加一个广播通知的方法
+
+```java
+/**
+ * 广播通知所有客户端
+ *
+ * @param message 广播的信息
+ */
+private void sendMessage(String message) {
+    for (int i = 0; i < allOut.length; i++) {
+        allOut[i].println(message);
+    }
+}
+```
+
+2. 调用该方法
+
+```java
+public void run() {
+    PrintWriter pw = null;
+    try {
+        InputStream in = socket.getInputStream();
+        InputStreamReader isr = new InputStreamReader(in, StandardCharsets.UTF_8);
+        BufferedReader br = new BufferedReader(isr);
+        OutputStream out = socket.getOutputStream();
+        OutputStreamWriter osw = new OutputStreamWriter(out, StandardCharsets.UTF_8);
+        BufferedWriter bw = new BufferedWriter(osw);
+        pw = new PrintWriter(bw, true);
+        allOut = Arrays.copyOf(allOut, allOut.length + 1);一个位
+        allOut[allOut.length - 1] = pw;
+        //广播通知所有客户端该用户上线了
+        sendMessage("一个用户上线了!当前在线人数:" + allOut.length);
+        String line;
+        while ((line = br.readLine()) != null) {
+            System.out.println(line);
+            //将客户端发送的信息回复给所有客户端
+            sendMessage(line);
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    } finally {
+        for (int i = 0; i < allOut.length; i++) {
+            if (allOut[i] == pw) {
+                allOut[i] = allOut[allOut.length - 1];)
+                allOut = Arrays.copyOf(allOut, allOut.length - 1);
+                break;
+            }
+        }
+        //广播通知所有客户端用户下线了
+        sendMessage("一个用户下线了,当前在线人数:" + allOut.length);
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 ```
 
 ## 4 常见问题
