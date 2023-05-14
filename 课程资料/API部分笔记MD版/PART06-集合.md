@@ -275,7 +275,7 @@ public class CollectionDemo03 {
         System.out.println("c1集合是否包含c3集合:" + b);
         /*
          * boolean retainAll(Collection c);
-         * 将当前集合中的元素保留和给定集合中的元素相同的部分(取交集)
+         * 将当前集合中的元素保留和给定集合中的元素相同的部分
          */
         c1.retainAll(c3);
         System.out.println("c1 = " + c1);
