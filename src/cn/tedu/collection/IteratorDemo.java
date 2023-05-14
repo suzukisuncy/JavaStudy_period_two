@@ -29,7 +29,7 @@ public class IteratorDemo {
             System.out.println(e);
             //④判断遍历的元素是否是D,如果是,则删除
             if ("D".equals(e)) {
-                //⑤迭代器中提供的删除方法 remove()
+                //⑤迭代器中提供的删除方法 remove()会删除当前遍历的元素
                 it.remove();
             }
         }
