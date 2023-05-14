@@ -31,7 +31,7 @@ public class Point {
     public String toString() {
         return "(" + x + ", " + y + ")";
     }
-
+    //alt+insert→equals and hashcode→Next→Next→Finish
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
