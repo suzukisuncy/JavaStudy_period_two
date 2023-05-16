@@ -2,7 +2,7 @@ package cn.tedu.collection;
 
 import java.util.Objects;
 
-public class Point {
+public class Point implements Comparable<Point> {
     private int x;
     private int y;
 
@@ -55,5 +55,27 @@ public class Point {
     @Override
     public int hashCode() {
         return Objects.hash(x, y);
+    }
+
+    /**
+     * 定义排序规则
+     *
+     * @param o
+     * @return
+     */
+    @Override
+    public int compareTo(Point o) {
+        //定义比教两个点的x坐标
+        int x1 = this.getX();
+        int x2 = o.getX();
+        // //判断x1大于x2说明x1大
+        // if (x1 - x2 > 0) {
+        //     return 1;
+        // } else if (x1 - x2 < 0) {//说明x2大
+        //     return -1;
+        // } else {//x1和x2相等
+        //     return 0;
+        // }
+        return x1 - x2;
     }
 }
