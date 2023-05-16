@@ -25,7 +25,7 @@ public class NewForDemo {
         for (String s : arr) {
             System.out.print(s + "\t");
         }
-        Collection c = new ArrayList();
+        Collection<String> c = new ArrayList();
         c.add("1");
         c.add("2");
         c.add("3");
@@ -33,9 +33,8 @@ public class NewForDemo {
         c.add("5");
         System.out.println("\r\n==========增强for循环遍历集合==========");
         //c.for
-        for (Object o : c) {
-            String e = (String) o;
-            System.out.print(o + "\t");
+        for (String s : c) {
+            System.out.println(s + "\t");
         }
     }
 }
