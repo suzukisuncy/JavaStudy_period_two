@@ -4,8 +4,9 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Scanner;
+import java.util.Collection;
 
 /**
  * 聊天室服务器端
@@ -18,7 +19,8 @@ public class Server {
      * ②监听该端口,一旦一个客户端访问服务器,则会立即返回一个Socket实例,并通过这个Socket实例和客户端进行交互
      */
     private ServerSocket server;
-    private PrintWriter[] allOut = {};
+    // private PrintWriter[] allOut = {};
+    private Collection<PrintWriter> allOut = new ArrayList<>();
 
     public Server() {
         try {
@@ -89,13 +91,13 @@ public class Server {
                 OutputStreamWriter osw = new OutputStreamWriter(out, StandardCharsets.UTF_8);
                 BufferedWriter bw = new BufferedWriter(osw);
                 pw = new PrintWriter(bw, true);
-                //将该客户端的输出流存入到共享数组allOut中
-                //①对allOut扩容
-                allOut = Arrays.copyOf(allOut, allOut.length + 1);
-                //②将pw存储到allOut中(存储到allOut中的最后一个位置)
-                allOut[allOut.length - 1] = pw;
+                //将该客户端的输出流存入到共享集合allOut中
+                // allOut = Arrays.copyOf(allOut, allOut.length + 1);
+                // allOut[allOut.length - 1] = pw;
+                allOut.add(pw);
                 //广播通知所有客户端该用户上线了
-                sendMessage("一个用户上线了!当前在线人数:" + allOut.length);
+                // sendMessage("一个用户上线了!当前在线人数:" + allOut.length);
+                sendMessage("一个用户上线了!当前在线人数:" + allOut.size());
                 //循环读取客户端发送的一行字符串
                 String line;
                 while ((line = br.readLine()) != null) {
@@ -106,23 +108,18 @@ public class Server {
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
-                //将当前客户端的输出流从allOut数组中取出
-                //遍历allOut
-                for (int i = 0; i < allOut.length; i++) {
-                    //找到要删除的元素
-                    //pw是对客户端要下线的输出流
-                    //allOut[i] 指定allOut数组遍历的当前元素
-                    if (allOut[i] == pw) {
-                        //将最后一个元素替换到目标元素
-                        allOut[i] = allOut[allOut.length - 1];
-                        //进行数组的缩容(将数组的最后一个元素删除)
-                        allOut = Arrays.copyOf(allOut, allOut.length - 1);
-                        //由于数组中只会存储一个目标元素,所以找到目标元素取出后,就可以停止遍历了
-                        break;
-                    }
-                }
+                //将当前客户端的输出流从allOut集合中取出
+                // for (int i = 0; i < allOut.length; i++) {
+                //     if (allOut[i] == pw) {
+                //         allOut[i] = allOut[allOut.length - 1];
+                //         allOut = Arrays.copyOf(allOut, allOut.length - 1);
+                //         break;
+                //     }
+                // }
+                allOut.remove(pw);
                 //广播通知所有客户端用户下线了
-                sendMessage("一个用户下线了,当前在线人数:" + allOut.length);
+                // sendMessage("一个用户下线了,当前在线人数:" + allOut.length);
+                sendMessage("一个用户下线了,当前在线人数:" + allOut.size());
                 try {
                     socket.close();
                 } catch (IOException e) {
@@ -137,8 +134,11 @@ public class Server {
          * @param message 广播的信息
          */
         private void sendMessage(String message) {
-            for (int i = 0; i < allOut.length; i++) {
-                allOut[i].println(message);
+            // for (int i = 0; i < allOut.length; i++) {
+            //     allOut[i].println(message);
+            // }
+            for (PrintWriter pw : allOut) {
+                pw.println(message);
             }
         }
     }

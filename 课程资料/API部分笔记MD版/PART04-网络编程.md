@@ -883,6 +883,68 @@ public void run() {
     }
 ```
 
+### 3.12 引入集合
+
+- 目前聊天室代码中,由于使用的是数组,所以面临着扩容缩容的问题,比较麻烦,所以可以使用集合替换,简化操作
+
+1. 将数组的声明替换为集合
+
+```java
+// private PrintWriter[] allOut = {};
+private Collection<PrintWriter> allOut = new ArrayList<>();
+```
+
+2. 将数组的扩容代码,直接通过集合存储即可,集合是不需要扩容的
+
+```java
+// allOut = Arrays.copyOf(allOut, allOut.length + 1);
+// allOut[allOut.length - 1] = pw;
+allOut.add(pw);
+```
+
+3. 将广播通知用户上线的位置,将length改为size()即可
+
+```java
+//广播通知所有客户端该用户上线了
+// sendMessage("一个用户上线了!当前在线人数:" + allOut.length);
+sendMessage("一个用户上线了!当前在线人数:" + allOut.size());
+```
+
+4. 将数组缩容的代码,直接调用remove方法取出即可
+
+```java
+//将当前客户端的输出流从allOut集合中取出
+// for (int i = 0; i < allOut.length; i++) {
+//     if (allOut[i] == pw) {
+//         allOut[i] = allOut[allOut.length - 1];
+//         allOut = Arrays.copyOf(allOut, allOut.length - 1);
+//         break;
+//     }
+// }
+allOut.remove(pw);
+```
+
+5. 将广播通知用户下线的位置,将length改为size()即可
+
+```java
+//广播通知所有客户端用户下线了
+// sendMessage("一个用户下线了,当前在线人数:" + allOut.length);
+sendMessage("一个用户下线了,当前在线人数:" + allOut.size());
+```
+
+6. 将sendMessage方法中遍历数组的代码,改为遍历集合即可
+
+```java
+private void sendMessage(String message) {
+    // for (int i = 0; i < allOut.length; i++) {
+    //     allOut[i].println(message);
+    // }
+    for (PrintWriter pw : allOut) {
+        pw.println(message);
+    }
+}
+```
+
 ## 4 常见问题
 
 ### 4.1 测试问题
