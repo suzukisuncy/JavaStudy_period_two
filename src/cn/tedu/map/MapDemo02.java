@@ -1,9 +1,8 @@
 package cn.tedu.map;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 /**
  * Map的遍历
@@ -11,6 +10,8 @@ import java.util.Set;
  * ①单独遍历key
  * ②单独遍历value(基本不用)
  * ③遍历每一组键值对
+ * <p>
+ * JDK8之后,集合和Map都支持了基于Lambda表达式的遍历
  */
 public class MapDemo02 {
     public static void main(String[] args) {
@@ -40,6 +41,26 @@ public class MapDemo02 {
             Integer value = entry.getValue();
             System.out.println(key + " = " + value);
         }
-        System.out.println("------------------遍历每一组键值对-------------------");
+        System.out.println("------------------Lambda表达式遍历Map-------------------");
+        map.forEach(
+                (k, v) -> System.out.println(k + " = " + v)
+        );
+        System.out.println("------------------Lambda表达式遍历集合-------------------");
+        Collection<String> c = new ArrayList<>();
+        c.add("A");
+        c.add("B");
+        c.add("C");
+        c.add("D");
+        c.forEach(
+                (e) -> System.out.println(e)
+        );
+        //参数只有一个时,可以省略小括号
+        c.forEach(
+                e -> System.out.println(e)
+        );
+        //如果输出的参数和传入的参数是同一个时,就可以省略参数,替换::
+        c.forEach(
+                System.out::println
+        );
     }
 }
