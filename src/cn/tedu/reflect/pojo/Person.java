@@ -32,11 +32,11 @@ public class Person {
         System.out.println(name + "的小秘密,不能被人知道");
     }
 
-    public void doSome(String thing) {
+    public void dosome(String thing) {
         System.out.println(name + "正在" + thing);
     }
 
-    public void doSome(String thing, int num) {
+    public void dosome(String thing, int num) {
         for (int i = 1; i <= num; i++) {
             System.out.println(name + "正在第" + i + "次" + thing);
         }
