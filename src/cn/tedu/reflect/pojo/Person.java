@@ -1,4 +1,4 @@
-package cn.tedu.reflect;
+package cn.tedu.reflect.pojo;
 
 public class Person {
     private String name = "张三";
