@@ -44,7 +44,7 @@ public class Student {
 
     @Override
     public String toString() {
-        return "Person{" +
+        return "Student{" +
                 "name='" + name + '\'' +
                 ", age=" + age +
                 '}';
