@@ -5,9 +5,6 @@ import java.util.Scanner;
 
 /**
  * 通过反射创建指定参数的实例对象
- * cn.tedu.reflect.pojo.Student
- * cn.tedu.reflect.pojo.Person
- * java.util.Date
  */
 public class ReflectDemo04 {
     public static void main(String[] args) throws Exception {

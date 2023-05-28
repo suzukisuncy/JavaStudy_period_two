@@ -33,12 +33,12 @@ public class Person {
     }
 
     public void doSome(String thing) {
-        System.out.println(name + "正在做" + thing);
+        System.out.println(name + "正在" + thing);
     }
 
     public void doSome(String thing, int num) {
         for (int i = 1; i <= num; i++) {
-            System.out.println(name + "正在第" + num + "次做" + thing);
+            System.out.println(name + "正在第" + i + "次" + thing);
         }
     }
 
