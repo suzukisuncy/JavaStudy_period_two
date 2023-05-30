@@ -475,4 +475,61 @@ public class Test03 {
 }
 ```
 
-#### 3.2.9 ReflectDemo9
+# 注解
+
+## 什么是注解
+
+注解(Annotation)是java语言提供的一种注释机制,但是这种注释机制不是给我们看的,而是给虚拟机看的,我们可以将注解应用于类、方法、字段等元素上,可以表示更多的信息和意图,方便开发者在后续的开发中利用这些注解使程序更加的灵活多变
+
+## 三种注解
+
+①预定义注解
+
+JAVASE中定义了一些注解,开发人员可以使用这些注解实现一些辅助功能,比如
+
+`@Override`、`@Deprecated`等等.
+
+②元注解
+
+元注解是用于修饰注解的注解,当我们定义注解时,会使用元注解来配置一些内容
+
+- `@Retention`: 用来指定当前注解的保留级别,有三个可选值,对应:
+  - `RetentionPolicy.SOURCE` 表示当前注解仅保留在源码中
+  - `RetentionPolicy.CLASS` 默认值,表示注解会保留在字节码文件中,但是不能被反射使用
+  - **`RetentionPolicy.RUNTIME`** 表示注解会保留在字节码文件中,但是能被反射使用
+- `@Target`: 用来指定当前注解使用的位置,如果不设置该元注解,则表示当前注解使用的位置任意,但是不建议这样去做,可选值都在ElementType中,常见的有:
+  - `ElementType.TYPE` 在类上使用
+  - `ElementType.FIELD` 在属性上使用
+  - `ElementType.METHOD` 在方法上使用
+  - `.....``
+- `如果需要同时设置多个值,可以这样写:@Target({ElementType.METHOD,ElementType.TYPE})`
+
+③自定义注解
+
+用户自己定义的注解
+
+## 自定义注解流程
+
+①定义注解
+
+使用`@interface`关键字来定义注解,例如我们声明一个名为`@AutoRunClass`的注解
+
+```java
+public @interface AutoRunClass {
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

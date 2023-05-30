@@ -1,6 +1,10 @@
 package cn.tedu.reflect.pojo;
 
+import cn.tedu.reflect.AutoRunClass;
+
+@AutoRunClass
 public class Person {
+    @AutoRunClass
     private String name = "张三";
     private int age = 18;
 
@@ -11,7 +15,7 @@ public class Person {
         this.name = name;
         this.age = age;
     }
-
+    @AutoRunClass
     public void eat() {
         System.out.println(name + ": 在吃饭!");
     }
