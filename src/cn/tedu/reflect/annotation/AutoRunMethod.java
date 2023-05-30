@@ -11,5 +11,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD) //修饰方法的注解
 public @interface AutoRunMethod {
-
+    int value() default 1;
 }

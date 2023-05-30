@@ -590,13 +590,63 @@ public class Test05 {
 }
 ```
 
+#### 3.2.12 Test06
+
+```java
+package cn.tedu.reflect;
+
+import cn.tedu.reflect.annotation.AutoRunClass;
+import cn.tedu.reflect.annotation.AutoRunMethod;
+
+import java.io.File;
+import java.lang.reflect.Method;
+
+/**
+ * 自动调用pojo包下的被@AutoRunClass注解修饰的类中的被@AutoRunMethod注解修饰的方法,
+ * 并且根据@AutoRunMethod注解传入的参数,来执行对应的次数
+ */
+public class Test06 {
+    public static void main(String[] args) throws Exception {
+        //定位Test02这个类所在的包
+        File dir = new File(
+                Test06.class.getResource("./pojo").toURI()
+        );
+        //获取包下的所有字节码文件
+        File[] subs = dir.listFiles(f -> f.getName().endsWith(".class"));
+        for (File sub : subs) {
+            String fileName = sub.getName(); //获取文件名 Person.class
+            //substring(a,b) 截取字符串中[a,b)范围的内容
+            //indexOf("") 获取指定字符串的下标
+            String className = fileName.substring(0, fileName.indexOf(".")); //获取类名
+            String allName = Test06.class.getPackage().getName() +
+                    ".pojo." + className; //获取全路径名
+            Class cls = Class.forName(allName); //声明对应类的Class实例,方便后面的反射操作
+            if (cls.isAnnotationPresent(AutoRunClass.class)) {//判断当前类是否被@AutoRunClass注解修饰
+                Object o = cls.newInstance(); //创建这个类的实例对象
+                Method[] methods = cls.getDeclaredMethods();//获取类中定义的所有方法
+                for (Method method : methods) {
+                    if (method.isAnnotationPresent(AutoRunMethod.class)) {
+                        AutoRunMethod anno = method.getAnnotation(AutoRunMethod.class);//获取方法上指定的注解
+                        int num = anno.value();//获取注解中传入的参数
+                        System.out.println("自动调用了" + className + "类中的" + method.getName() + "方法" + num + "次!");
+                        for (int i = 0; i < num; i++) {
+                            method.invoke(o);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
 # 注解
 
-## 什么是注解
+## 1 什么是注解
 
 注解(Annotation)是java语言提供的一种注释机制,但是这种注释机制不是给我们看的,而是给虚拟机看的,我们可以将注解应用于类、方法、字段等元素上,可以表示更多的信息和意图,方便开发者在后续的开发中利用这些注解使程序更加的灵活多变
 
-## 三种注解
+## 2 三种注解
 
 ①预定义注解
 
@@ -623,7 +673,38 @@ JAVASE中定义了一些注解,开发人员可以使用这些注解实现一些�
 
 用户自己定义的注解
 
-## 自定义注解流程
+## 3 注解的参数
+
+我们可以利用注解的参数来为赋值
+
+### 3.1 注解的语法格式 
+
+```java
+参数类型 参数名() [default 默认值];
+```
+
+- 如果声明参数时,设置了默认值,则在不赋值时,默认使用默认值
+
+## 3.2 参数名
+
+- 参数类型可以使用以下类型:
+  - 所有的基本类型
+  - String类型
+  - Class类型
+  - 枚举类型
+  - 以上所以类型都支持数组模式,int[],String[]等
+
+- 参数名可以起任意名
+  - 注解中只声明一个参数时,参数名最好起`value`,可以省略参数名
+  - 注解中声明多个参数时,命名为`value`时,也必须要将参数名写上,否则会报错
+
+## 3.2 参数的赋值
+
+- 使用注解时,如果注解中有声明参数,则需要为参数赋值,赋值的格式为:
+  - 一个参数时: `@AutoRunMethod(参数名 = 参数值)`,如果参数名为`value`则可以忽略参数名`@AutoRunMethod(参数值)`
+  - 多个参数时: `@AutoRunMethod(参数名1 = 参数值1,参数名2 = 参数值2)`,多个参数值顺序无所谓
+
+## 4 自定义注解流程
 
 ①定义注解
 

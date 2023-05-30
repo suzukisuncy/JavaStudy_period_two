@@ -29,7 +29,7 @@ public class Person {
         System.out.println(name + ": 在说话!");
     }
 
-    @AutoRunMethod
+    @AutoRunMethod(2)
     public void sing() {
         System.out.println(name + ": 在唱歌!");
     }

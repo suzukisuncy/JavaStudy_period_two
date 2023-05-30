@@ -20,7 +20,7 @@ public class Student {
         System.out.println(name + ": 在学习!");
     }
 
-    @AutoRunMethod
+    @AutoRunMethod(3)
     public void course() {
         System.out.println(name + ": 在上课!");
     }
