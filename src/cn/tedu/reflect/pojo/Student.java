@@ -1,5 +1,9 @@
 package cn.tedu.reflect.pojo;
 
+import cn.tedu.reflect.annotation.AutoRunClass;
+import cn.tedu.reflect.annotation.AutoRunMethod;
+
+@AutoRunClass
 public class Student {
     private String name = "李四";
     private int age = 18;
@@ -16,6 +20,7 @@ public class Student {
         System.out.println(name + ": 在学习!");
     }
 
+    @AutoRunMethod
     public void course() {
         System.out.println(name + ": 在上课!");
     }
@@ -24,6 +29,7 @@ public class Student {
         System.out.println(name + ": 在做作业!");
     }
 
+    @AutoRunMethod
     public void java() {
         System.out.println(name + ": 在敲代码!");
     }

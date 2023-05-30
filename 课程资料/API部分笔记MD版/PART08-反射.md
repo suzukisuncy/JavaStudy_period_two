@@ -475,6 +475,32 @@ public class Test03 {
 }
 ```
 
+#### 3.2.9 ReflectDemo07
+
+```java
+package cn.tedu.reflect;
+
+import cn.tedu.reflect.annotation.AutoRunClass;
+
+/**
+ * 通过反射判断类上是否被指定注解修饰
+ */
+public class ReflectDemo07 {
+    public static void main(String[] args) throws Exception {
+        Class<?> cls = Class.forName("cn.tedu.reflect.pojo.Person");
+        if (cls.isAnnotationPresent(AutoRunClass.class)) {
+            System.out.println(cls.getSimpleName() + "被@AutoRunClass注解修饰了");
+        } else {
+            System.out.println(cls.getSimpleName() + "没有被@AutoRunClass注解修饰了");
+        }
+    }
+}
+```
+
+#### 3.2.10 Test04
+
+
+
 # 注解
 
 ## 什么是注解
@@ -512,14 +538,24 @@ JAVASE中定义了一些注解,开发人员可以使用这些注解实现一些�
 
 ①定义注解
 
-使用`@interface`关键字来定义注解,例如我们声明一个名为`@AutoRunClass`的注解
+使用`@interface`关键字来定义注解,例如我们声明一个名为`@AutoRunMethod`的注解
 
 ```java
-public @interface AutoRunClass {
+public @interface AutoRunMethods {
 }
 ```
 
+②为注解声明元注解,需要根据实际情况,比如我们的注解需要被反射调用,并且需要声明在方法上
 
+```java
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.Method)
+public @interface AutoRunMethod {
+
+}
+```
+
+③为注解添加参数
 
 
 
