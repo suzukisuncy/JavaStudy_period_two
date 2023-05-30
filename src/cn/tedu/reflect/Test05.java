@@ -1,13 +1,14 @@
 package cn.tedu.reflect;
 
 import cn.tedu.reflect.annotation.AutoRunClass;
+import cn.tedu.reflect.annotation.AutoRunMethod;
 
 import java.io.File;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 /**
- * 自动调用pojo包下的被@AutoRunClass注解修饰的类中的方法名含有"s"的无参且公开的方法
+ * 自动调用pojo包下的被@AutoRunClass注解修饰的类中的被@AutoRunMethod注解修饰的方法
  */
 public class Test05 {
     public static void main(String[] args) throws Exception {
@@ -25,15 +26,13 @@ public class Test05 {
             String allName = Test05.class.getPackage().getName() +
                     ".pojo." + className; //获取全路径名
             Class cls = Class.forName(allName); //声明对应类的Class实例,方便后面的反射操作
-            if (cls.isAnnotationPresent(AutoRunClass.class)){//判断当前类是否被@AutoRunClass注解修饰
-                Object o = cls.newInstance(); //创建两个类的实例对象
+            if (cls.isAnnotationPresent(AutoRunClass.class)) {//判断当前类是否被@AutoRunClass注解修饰
+                Object o = cls.newInstance(); //创建这个类的实例对象
                 Method[] methods = cls.getDeclaredMethods();//获取类中定义的所有方法
                 for (Method method : methods) {
-                    if (method.getName().contains("s") && //名字含有s的
-                            method.getParameterCount() == 0 && //无参的
-                            method.getModifiers() == Modifier.PUBLIC) { //公开的
-                        System.out.println("自动调用" + className + "类中的方法:" + method.getName());
-                        method.invoke(o);//调用方法
+                    if (method.isAnnotationPresent(AutoRunMethod.class)) {
+                        System.out.println("自动调用了" + className + "类中的" + method.getName() + "方法");
+                        method.invoke(o);
                     }
                 }
             }

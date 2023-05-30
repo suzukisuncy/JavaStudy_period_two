@@ -29,7 +29,6 @@ public class Student {
         System.out.println(name + ": 在做作业!");
     }
 
-    @AutoRunMethod
     public void java() {
         System.out.println(name + ": 在敲代码!");
     }
